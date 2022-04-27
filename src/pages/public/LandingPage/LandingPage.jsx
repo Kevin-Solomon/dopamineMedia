@@ -14,12 +14,12 @@ import {
 } from '@chakra-ui/react';
 function LandingPage() {
   const [isMobile] = useMediaQuery('(min-width: 768px)');
-  console.log(isMobile);
   return (
     <Box d="flex" h="100vh">
       {isMobile ? (
         <Box minW="50%" d="flex" justifyContent="center">
           <Image
+            w="35rem"
             objectFit="contain"
             src="https://i.pinimg.com/originals/f4/f3/73/f4f37379be88e2ca55bc10be8de48b71.gif"
           />
@@ -33,14 +33,7 @@ function LandingPage() {
         alignItems="center"
         justifyContent="center"
       >
-        <Box
-          borderRadius="5px"
-          padding="1rem"
-          border="1px"
-          // borderColor=
-          // "
-          minW="350px"
-        >
+        <Box borderRadius="5px" padding="1rem" border="1px" minW="350px">
           <Text padding="5px" fontSize="3xl" align="center">
             DopamineMedia
           </Text>
