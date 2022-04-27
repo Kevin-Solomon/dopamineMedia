@@ -5,7 +5,7 @@ const AuthContext = createContext({ user: null, token: null });
 const AuthProvider = ({ children }) => {
   const [authState, authDispatch] = useReducer(authReducer, initialAuthState);
   useEffect(() => {
-    const user = localStorage.getItem('user');
+    const user = JSON.parse(localStorage.getItem('user'));
     const token = localStorage.getItem('token');
     if (user === null) return;
     if (user) {

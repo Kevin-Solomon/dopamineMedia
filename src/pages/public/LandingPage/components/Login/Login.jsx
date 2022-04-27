@@ -15,7 +15,6 @@ function Login() {
     setUser(prevState => ({ ...prevState, [e.target.name]: e.target.value }));
   };
   const { authState, authDispatch } = useAuth();
-
   return (
     <FormControl>
       <FormLabel htmlFor="email">Email address</FormLabel>
