@@ -5,11 +5,12 @@ import {
   Input,
   FormHelperText,
   Button,
-  Box,
+  useToast,
 } from '@chakra-ui/react';
 import { useAuth } from './../../../../../context';
-import { loginHandler } from './../../../../../service';
+import { formSubmitHandler } from './../../../../../service';
 function Login() {
+  const toast = useToast();
   const [user, setUser] = useState({ username: '', password: '' });
   const changeHandler = e => {
     setUser(prevState => ({ ...prevState, [e.target.name]: e.target.value }));
@@ -17,7 +18,7 @@ function Login() {
   const { authState, authDispatch } = useAuth();
   return (
     <FormControl>
-      <FormLabel htmlFor="username">Email address</FormLabel>
+      <FormLabel htmlFor="username">Username</FormLabel>
       <Input
         id="username"
         name="username"
@@ -42,7 +43,9 @@ function Login() {
         marginTop="10px"
         w="100%"
         colorScheme="blue"
-        onClick={() => loginHandler(user, authDispatch)}
+        onClick={() =>
+          formSubmitHandler('/api/auth/login', user, authDispatch, toast)
+        }
       >
         Login
       </Button>

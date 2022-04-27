@@ -1,2 +1,2 @@
-import { loginHandler } from './loginHandler';
-export { loginHandler };
+import { formSubmitHandler } from './formSubmitHandler';
+export { formSubmitHandler };
