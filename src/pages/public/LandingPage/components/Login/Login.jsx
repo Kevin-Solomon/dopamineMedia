@@ -10,19 +10,19 @@ import {
 import { useAuth } from './../../../../../context';
 import { loginHandler } from './../../../../../service';
 function Login() {
-  const [user, setUser] = useState({ email: '', password: '' });
+  const [user, setUser] = useState({ username: '', password: '' });
   const changeHandler = e => {
     setUser(prevState => ({ ...prevState, [e.target.name]: e.target.value }));
   };
   const { authState, authDispatch } = useAuth();
   return (
     <FormControl>
-      <FormLabel htmlFor="email">Email address</FormLabel>
+      <FormLabel htmlFor="username">Email address</FormLabel>
       <Input
-        id="email"
-        name="email"
-        type="email"
-        value={user.email}
+        id="username"
+        name="username"
+        type="username"
+        value={user.username}
         onChange={changeHandler}
       />
       <FormHelperText></FormHelperText>
@@ -42,7 +42,7 @@ function Login() {
         marginTop="10px"
         w="100%"
         colorScheme="blue"
-        onClick={() => loginHandler(user.email, user.password, authDispatch)}
+        onClick={() => loginHandler(user, authDispatch)}
       >
         Login
       </Button>

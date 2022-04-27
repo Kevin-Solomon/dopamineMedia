@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-const loginHandler = async (username, password, authDispatch) => {
+const loginHandler = async (user, authDispatch) => {
   const response = await axios({
     method: 'POST',
     url: '/api/auth/login',
-    data: { username, password },
+    data: user,
   });
   console.log(response);
   authDispatch({
