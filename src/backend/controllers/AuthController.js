@@ -1,7 +1,7 @@
-import { v4 as uuid } from "uuid";
-import { Response } from "miragejs";
-import { formatDate } from "../utils/authUtils";
-const sign = require("jwt-encode");
+import { v4 as uuid } from 'uuid';
+import { Response } from 'miragejs';
+import { formatDate } from '../utils/authUtils';
+const sign = require('jwt-encode');
 
 /**
  * All the routes related to Auth are present here.
@@ -16,6 +16,7 @@ const sign = require("jwt-encode");
 
 export const signupHandler = function (schema, request) {
   const { username, password, ...rest } = JSON.parse(request.requestBody);
+  console.log(username, password, rest);
   try {
     // check if username already exists
     const foundUser = schema.users.findBy({ username: username });
@@ -24,7 +25,7 @@ export const signupHandler = function (schema, request) {
         422,
         {},
         {
-          errors: ["Unprocessable Entity. Username Already Exists."],
+          errors: ['Unprocessable Entity. Username Already Exists.'],
         }
       );
     }
@@ -74,7 +75,7 @@ export const loginHandler = function (schema, request) {
         {},
         {
           errors: [
-            "The username you entered is not Registered. Not Found error",
+            'The username you entered is not Registered. Not Found error',
           ],
         }
       );
@@ -91,7 +92,7 @@ export const loginHandler = function (schema, request) {
       {},
       {
         errors: [
-          "The credentials you entered are invalid. Unauthorized access error.",
+          'The credentials you entered are invalid. Unauthorized access error.',
         ],
       }
     );
