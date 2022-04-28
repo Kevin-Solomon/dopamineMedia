@@ -1,2 +1,3 @@
 import { formSubmitHandler } from './formSubmitHandler';
-export { formSubmitHandler };
+import { getIntialPost } from './getIntialPost';
+export { formSubmitHandler, getIntialPost };

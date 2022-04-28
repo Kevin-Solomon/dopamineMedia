@@ -6,7 +6,7 @@ import App from './App';
 import { makeServer } from './server';
 import { ChakraProvider } from '@chakra-ui/react';
 import { BrowserRouter } from 'react-router-dom';
-import { AuthProvider } from './context/';
+import { AuthProvider, PostProvider } from './context/';
 // Call make Server
 makeServer();
 
@@ -15,7 +15,9 @@ ReactDOM.render(
     <ChakraProvider>
       <BrowserRouter>
         <AuthProvider>
-          <App />
+          <PostProvider>
+            <App />
+          </PostProvider>
         </AuthProvider>
       </BrowserRouter>
     </ChakraProvider>

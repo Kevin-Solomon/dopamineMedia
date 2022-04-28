@@ -1,3 +1,3 @@
 import { authReducer, initialAuthState } from './authReducer';
-
-export { initialAuthState, authReducer };
+import { postReducer, initialPostState } from './postReducer';
+export { initialAuthState, authReducer, postReducer, initialPostState };
