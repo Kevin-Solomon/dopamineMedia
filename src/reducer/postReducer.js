@@ -3,6 +3,7 @@ const initialPostState = {
 };
 
 const postReducer = (state, { type, payload }) => {
+  console.log(payload, 'in reducer');
   switch (type) {
     case 'INITIAL':
       return { posts: [...payload] };

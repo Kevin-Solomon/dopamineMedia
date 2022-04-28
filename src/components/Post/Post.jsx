@@ -1,23 +1,37 @@
-import { Textarea } from '@chakra-ui/react';
+import {
+  InputGroup,
+  Input,
+  InputRightElement,
+  Box,
+  Textarea,
+  Avatar,
+  Button,
+  Text,
+} from '@chakra-ui/react';
 import React from 'react';
 import { getIcons } from '../../util/getIcons';
 
 function Post() {
+  console.log('in post');
   return (
-    <Box>
-      <Box d="flex" justifyContent="space-between">
-        <Box>
-          <Avatar
-            size="sm"
-            name="Kent Dodds"
-            src="https://bit.ly/kent-c-dodds"
-          />
-          Creator Name
-        </Box>
-        <Box>{getIcons('THREE_DOTS', '27px')}</Box>
-        <Textarea placeholder="Here is a sample placeholder" />
-        <Box>
+    <Box maxW="100%">
+      <Box d="flex" justifyContent="space-between" flexDirection="column">
+        <Box d="flex" justifyContent="space-between">
           <Box>
+            <Avatar
+              size="sm"
+              name="Kent Dodds"
+              src="https://bit.ly/kent-c-dodds"
+            />
+            <Text>Creator</Text>
+          </Box>
+
+          <Box>{getIcons('THREE_DOTS', '27px')}</Box>
+        </Box>
+
+        <Textarea placeholder="Here is a sample placeholder" />
+        <Box d="flex" justifyContent="space-between">
+          <Box d="flex">
             {getIcons('OUTLINE_HEART', '27px')}
             {getIcons('COMMENT', '27px')}
           </Box>

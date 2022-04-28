@@ -75,7 +75,7 @@ const getIcons = (type, size) => {
           <AiOutlineComment />
         </span>
       );
-    case 'BOOKMARK_OUTLINE':
+    case 'BOOKMARK':
       return (
         <span style={style}>
           <BsBookmark />
@@ -89,6 +89,7 @@ const getIcons = (type, size) => {
       );
 
     default:
+      console.error('error in getIcons');
       return new Error('nothing was returned');
   }
 };
