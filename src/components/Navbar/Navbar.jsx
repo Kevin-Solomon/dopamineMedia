@@ -51,8 +51,9 @@ function Navbar() {
           <ModalHeader>Modal Title</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <FormLabel htmlFor="image">Email address</FormLabel>
+            <FormLabel>Drag and drop</FormLabel>
             <Input
+              src="https://bit.ly/naruto-sage"
               id="image"
               type="file"
               onChange={e => {
@@ -66,17 +67,6 @@ function Navbar() {
                 };
                 console.log(reader);
               }}
-              onDrop={e => {
-                e.preventDefault();
-                console.log('in drop');
-                const reader = new FileReader();
-                reader.readAsDataURL(e.dataTransfer.files[0]);
-                reader.onload = e => {
-                  e.preventDefault();
-                  setPost(prevPost => ({ ...prevPost, img: reader.result }));
-                };
-                console.log(reader);
-              }}
             />
             {post.img === '' ? null : (
               <AspectRatio maxW="400px" ratio={1 / 1}>
@@ -84,6 +74,7 @@ function Navbar() {
               </AspectRatio>
             )}
             <Textarea
+              marginTop="20px"
               value={post.caption}
               onChange={e => {
                 setPost(prevPost => ({ ...prevPost, content: e.target.value }));

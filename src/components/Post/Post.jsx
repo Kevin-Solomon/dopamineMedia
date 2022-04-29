@@ -25,6 +25,7 @@ import { updatePost } from './../../service';
 function Post({ username, likes, content, img, _id }) {
   const [editable, setEditable] = useState(false);
   const [post, setPost] = useState({ content: content, img: img });
+  console.log(img);
   const { authState } = useAuth();
   const { postDispatch } = usePost();
   return (
@@ -81,7 +82,7 @@ function Post({ username, likes, content, img, _id }) {
             </PopoverContent>
           </Popover>
         </Box>
-        {img === undefined ? null : (
+        {img === undefined || img === '' ? null : (
           <Box>
             <AspectRatio maxW="400px" ratio={1} margin="0 auto">
               <Image src={img} alt="post" objectFit="cover" />
