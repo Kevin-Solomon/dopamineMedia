@@ -16,16 +16,16 @@ import {
   PopoverHeader,
   PopoverBody,
   PopoverTrigger,
-  Center,
 } from '@chakra-ui/react';
-import React from 'react';
+import React, { useState } from 'react';
 import { useAuth, usePost } from '../../context';
 import { getIcons } from '../../util/getIcons';
 import { deletePost } from './../../service/deletePost';
+import { updatePost } from './../../service';
 function Post({ username, likes, content, img, _id }) {
-  console.log(_id);
+  const [editable, setEditable] = useState(false);
+  const [post, setPost] = useState({ content: content, img: img });
   const { authState } = useAuth();
-  console.log(authState);
   const { postDispatch } = usePost();
   return (
     <Box w="100%" margin="10px auto" backgroundColor="#ffffff">
@@ -67,6 +67,16 @@ function Post({ username, likes, content, img, _id }) {
                     Delete Post
                   </Text>
                 ) : null}
+                {authState.user.username === username ? (
+                  <Text
+                    cursor="pointer"
+                    onClick={() => {
+                      setEditable(true);
+                    }}
+                  >
+                    Edit Post
+                  </Text>
+                ) : null}
               </PopoverBody>
             </PopoverContent>
           </Popover>
@@ -78,7 +88,26 @@ function Post({ username, likes, content, img, _id }) {
             </AspectRatio>
           </Box>
         )}
-        <Text readOnly>{content}</Text>
+        {editable ? (
+          <Textarea
+            value={post.content}
+            onChange={e =>
+              setPost(prevPost => ({ ...prevPost, content: e.target.value }))
+            }
+          />
+        ) : (
+          <Text readOnly>{content}</Text>
+        )}
+        {editable ? (
+          <Button
+            onClick={() => {
+              updatePost(_id, post, authState.token, postDispatch);
+              setEditable(false);
+            }}
+          >
+            Save
+          </Button>
+        ) : null}
         <Box d="flex" justifyContent="space-between">
           <Box d="flex">
             {getIcons('OUTLINE_HEART', '27px')}

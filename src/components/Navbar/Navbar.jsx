@@ -14,6 +14,7 @@ import {
   Button,
   AspectRatio,
   Image,
+  FormLabel,
 } from '@chakra-ui/react';
 import { useAuth, usePost } from '../../context';
 
@@ -50,7 +51,9 @@ function Navbar() {
           <ModalHeader>Modal Title</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <input
+            <FormLabel htmlFor="image">Email address</FormLabel>
+            <Input
+              id="image"
               type="file"
               onChange={e => {
                 e.preventDefault();

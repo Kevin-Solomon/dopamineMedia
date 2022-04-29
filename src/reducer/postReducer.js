@@ -11,6 +11,8 @@ const postReducer = (state, { type, payload }) => {
       return { posts: [...payload] };
     case 'DELETE_POST':
       return { posts: [...payload] };
+    case 'UPDATE_POST':
+      return { posts: [...payload] };
     default:
       return new Error('error in post reduccer');
   }
