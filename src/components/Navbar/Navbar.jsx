@@ -11,6 +11,9 @@ function Navbar() {
       top="0px"
       right="0px"
       paddingTop="1rem"
+      zIndex="1"
+      border="1px solid #dbdbdb"
+      padding="10px"
     >
       <Box width="60%" margin="0 auto" d="flex" justifyContent="space-between">
         <Text>This is the Box</Text>

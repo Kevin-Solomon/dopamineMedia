@@ -8,9 +8,16 @@ function PostListing() {
   const { authState } = useAuth();
   console.log(postState.posts.map(post => <div>{post._id}</div>));
   return (
-    <Box marginTop="3rem">
-      {postState.posts.map(post => (
-        <Post>{post._id}</Post>
+    <Box
+      margin="3rem auto"
+      d="flex"
+      maxW="800px"
+      flexDirection="column"
+      gap="1rem"
+      backgroundColor="#fafafa"
+    >
+      {postState.posts.map(({ username, likes, content, _id }) => (
+        <Post key={_id} username={username} likes={likes} content={content} />
       ))}
     </Box>
   );
