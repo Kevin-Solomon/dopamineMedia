@@ -7,13 +7,28 @@ import {
   Avatar,
   Button,
   Text,
+  AspectRatio,
+  Image,
+  Popover,
+  PopoverContent,
+  PopoverArrow,
+  PopoverCloseButton,
+  PopoverHeader,
+  PopoverBody,
+  PopoverTrigger,
+  Center,
 } from '@chakra-ui/react';
 import React from 'react';
+import { useAuth, usePost } from '../../context';
 import { getIcons } from '../../util/getIcons';
-
-function Post({ username, likes, content }) {
+import { deletePost } from './../../service/deletePost';
+function Post({ username, likes, content, img, _id }) {
+  console.log(_id);
+  const { authState } = useAuth();
+  console.log(authState);
+  const { postDispatch } = usePost();
   return (
-    <Box w="100%" margin="10px auto">
+    <Box w="100%" margin="10px auto" backgroundColor="#ffffff">
       <Box
         d="flex"
         justifyContent="space-between"
@@ -26,16 +41,44 @@ function Post({ username, likes, content }) {
           <Box>
             <Avatar
               size="sm"
-              name="Kent Dodds"
-              src="https://bit.ly/kent-c-dodds"
+              name={username}
+              src="hdttps://bit.ly/kent-c-dodds"
             />
             <Text>{username}</Text>
           </Box>
-
-          <Box>{getIcons('THREE_DOTS', '27px')}</Box>
+          <Popover>
+            <PopoverTrigger>
+              <Box>{getIcons('THREE_DOTS', '27px')}</Box>
+            </PopoverTrigger>
+            <PopoverContent>
+              <PopoverArrow />
+              <PopoverCloseButton />
+              <PopoverHeader>Post Actions</PopoverHeader>
+              <PopoverBody>
+                <Text cursor="pointer">Follow/ Unfollow</Text>
+                <Text cursor="pointer">Go To Post</Text>
+                {authState.user.username === username ? (
+                  <Text
+                    cursor="pointer"
+                    onClick={() => {
+                      deletePost(authState.token, _id, postDispatch);
+                    }}
+                  >
+                    Delete Post
+                  </Text>
+                ) : null}
+              </PopoverBody>
+            </PopoverContent>
+          </Popover>
         </Box>
-
-        <Textarea placeholder="Message" value={content} />
+        {img === undefined ? null : (
+          <Box>
+            <AspectRatio maxW="400px" ratio={1} margin="0 auto">
+              <Image src={img} alt="post" objectFit="cover" />
+            </AspectRatio>
+          </Box>
+        )}
+        <Text readOnly>{content}</Text>
         <Box d="flex" justifyContent="space-between">
           <Box d="flex">
             {getIcons('OUTLINE_HEART', '27px')}

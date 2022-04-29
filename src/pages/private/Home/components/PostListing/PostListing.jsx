@@ -4,9 +4,9 @@ import Post from './../../../../../components/Post/Post';
 import { Box } from '@chakra-ui/react';
 function PostListing() {
   const { postState } = usePost();
-  console.log(postState, 'in listing');
+
   const { authState } = useAuth();
-  console.log(postState.posts.map(post => <div>{post._id}</div>));
+
   return (
     <Box
       margin="3rem auto"
@@ -14,10 +14,16 @@ function PostListing() {
       maxW="800px"
       flexDirection="column"
       gap="1rem"
-      backgroundColor="#fafafa"
     >
-      {postState.posts.map(({ username, likes, content, _id }) => (
-        <Post key={_id} username={username} likes={likes} content={content} />
+      {postState.posts.map(({ username, likes, content, _id, img }) => (
+        <Post
+          key={_id}
+          username={username}
+          likes={likes}
+          content={content}
+          img={img}
+          _id={_id}
+        />
       ))}
     </Box>
   );

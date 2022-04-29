@@ -7,6 +7,10 @@ const postReducer = (state, { type, payload }) => {
   switch (type) {
     case 'INITIAL':
       return { posts: [...payload] };
+    case 'ADD_POST':
+      return { posts: [...payload] };
+    case 'DELETE_POST':
+      return { posts: [...payload] };
     default:
       return new Error('error in post reduccer');
   }

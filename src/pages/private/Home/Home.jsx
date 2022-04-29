@@ -5,7 +5,7 @@ import PostListing from './components/PostListing/PostListing';
 
 function Home() {
   return (
-    <Box>
+    <Box backgroundColor="#fafafa">
       <Navbar />
       <PostListing />
     </Box>

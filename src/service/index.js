@@ -1,2 +1,4 @@
 import { formSubmitHandler } from './formSubmitHandler';
-export { formSubmitHandler };
+import { addPost } from './addPost';
+import { deletePost } from './deletePost';
+export { formSubmitHandler, addPost, deletePost };
