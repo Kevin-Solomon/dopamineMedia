@@ -4,7 +4,6 @@ const initialAuthState = {
 };
 
 const authReducer = (state, { type, payload }) => {
-  console.log(payload);
   switch (type) {
     case 'LOGIN':
       localStorage.setItem('user', JSON.stringify(payload.user));

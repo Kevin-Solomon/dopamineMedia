@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { addPost } from '../../service';
 import { Box, Input, Text, Textarea } from '@chakra-ui/react';
 import { getIcons } from '../../util/getIcons';
@@ -15,6 +15,7 @@ import {
   AspectRatio,
   Image,
   FormLabel,
+  Center,
 } from '@chakra-ui/react';
 import { useAuth, usePost } from '../../context';
 
@@ -23,6 +24,7 @@ function Navbar() {
   const { authState } = useAuth();
   const { postDispatch } = usePost();
   const [post, setPost] = useState({ content: '', img: '' });
+
   return (
     <Box
       bg="#ffffff"
@@ -51,8 +53,9 @@ function Navbar() {
           <ModalHeader>Modal Title</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <FormLabel>Drag and drop</FormLabel>
+            <FormLabel htmlFor="image">Click here</FormLabel>
             <Input
+              display="none"
               src="https://bit.ly/naruto-sage"
               id="image"
               type="file"
@@ -65,9 +68,35 @@ function Navbar() {
                   e.preventDefault();
                   setPost(prevPost => ({ ...prevPost, img: reader.result }));
                 };
-                console.log(reader);
               }}
             />
+            <div
+              style={{ height: '100px', backgroundColor: '#fafafa' }}
+              onDragOver={e => {
+                e.preventDefault();
+                return false;
+              }}
+              onDrop={e => {
+                e.preventDefault();
+                const reader = new FileReader();
+
+                reader.readAsDataURL(e.dataTransfer.files[0]);
+                reader.onload = e => {
+                  e.preventDefault();
+                  setPost(prevPost => ({ ...prevPost, img: reader.result }));
+                };
+              }}
+            >
+              <Center
+                w="100%"
+                h="100%"
+                border="3px dashed"
+                borderColor="gray.200"
+              >
+                Drag And Drop Here
+              </Center>
+            </div>
+
             {post.img === '' ? null : (
               <AspectRatio maxW="400px" ratio={1 / 1}>
                 <Image src={post.img} objectFit="contain" />

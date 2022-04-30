@@ -64,9 +64,8 @@ export const getAllUserPostsHandler = function (schema, request) {
  * */
 
 export const createPostHandler = function (schema, request) {
-  console.log(request);
   const user = requiresAuth.call(this, request);
-  console.log(user);
+
   try {
     if (!user) {
       return new Response(
@@ -270,7 +269,7 @@ export const deletePostHandler = function (schema, request) {
       );
     }
     const postId = request.params.postId;
-    console.log(postId);
+
     let post = schema.posts.findBy({ _id: postId }).attrs;
     if (post.username !== user.username) {
       return new Response(
@@ -286,7 +285,6 @@ export const deletePostHandler = function (schema, request) {
     this.db.posts.remove({ _id: postId });
     return new Response(201, {}, { posts: this.db.posts });
   } catch (error) {
-    console.log(error);
     return new Response(
       500,
       {},

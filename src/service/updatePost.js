@@ -6,7 +6,6 @@ const updatePost = async (_id, post, token, postDispatch) => {
     url: `/api/posts/edit/${_id}`,
     data: { postData: post },
   });
-  console.log(response);
   postDispatch({ type: 'UPDATE_POST', payload: response.data.posts });
 };
 export { updatePost };

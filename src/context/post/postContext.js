@@ -9,11 +9,9 @@ const PostProvider = ({ children }) => {
   const { authState } = useAuth();
   const [postState, postDispatch] = useReducer(postReducer, initialPostState);
   useEffect(() => {
-    console.log('ineffect');
     const getIntialPost = async () => {
       if (authState.token !== null) {
         const response = await axios({ method: 'GET', url: '/api/posts' });
-        console.log(response.data.posts);
         postDispatch({ type: 'INITIAL', payload: response.data.posts });
       }
     };

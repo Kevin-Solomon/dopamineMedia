@@ -1,7 +1,6 @@
 import axios from 'axios';
 
 const addPost = async (token, post, postDispatch) => {
-  console.log(post, 'in post');
   const response = await axios({
     method: 'POST',
     url: '/api/posts',

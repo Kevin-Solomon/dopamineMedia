@@ -25,7 +25,6 @@ import { updatePost } from './../../service';
 function Post({ username, likes, content, img, _id }) {
   const [editable, setEditable] = useState(false);
   const [post, setPost] = useState({ content: content, img: img });
-  console.log(img);
   const { authState } = useAuth();
   const { postDispatch } = usePost();
   return (
