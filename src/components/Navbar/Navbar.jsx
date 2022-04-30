@@ -16,6 +16,7 @@ import {
   Image,
   FormLabel,
   Center,
+  useToast,
 } from '@chakra-ui/react';
 import { useAuth, usePost } from '../../context';
 
@@ -24,6 +25,7 @@ function Navbar() {
   const { authState } = useAuth();
   const { postDispatch } = usePost();
   const [post, setPost] = useState({ content: '', img: '' });
+  const toast = useToast();
 
   return (
     <Box
@@ -47,7 +49,13 @@ function Navbar() {
           <Box>{getIcons('OUTLINE_HEART', '27px')}</Box>
         </Box>
       </Box>
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal
+        isOpen={isOpen}
+        onClose={() => {
+          setPost({ caption: '', img: '' });
+          onClose();
+        }}
+      >
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Modal Title</ModalHeader>
@@ -112,13 +120,10 @@ function Navbar() {
           </ModalBody>
 
           <ModalFooter>
-            <Button mr={3} onClick={onClose}>
-              Exit Post
-            </Button>
             <Button
               colorScheme="blue"
               onClick={() => {
-                addPost(authState.token, post, postDispatch);
+                addPost(authState.token, post, postDispatch, toast);
                 setPost({ caption: '', img: '' });
                 onClose();
               }}
