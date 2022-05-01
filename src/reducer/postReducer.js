@@ -12,6 +12,10 @@ const postReducer = (state, { type, payload }) => {
       return { posts: [...payload] };
     case 'UPDATE_POST':
       return { posts: [...payload] };
+    case 'ADD_TO_LIKE':
+      return { posts: [...payload] };
+    case 'REMOVE_FROM_LIKE':
+      return { posts: [...payload] };
     default:
       return new Error('error in post reduccer');
   }
