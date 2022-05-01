@@ -7,7 +7,6 @@ const formSubmitHandler = async (url, user, authDispatch, toast) => {
       url: url,
       data: user,
     });
-    console.log(response);
     switch (response.status) {
       case 200:
         authDispatch({

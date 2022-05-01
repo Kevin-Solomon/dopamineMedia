@@ -1,2 +1,3 @@
 import { AuthProvider, useAuth } from './auth/authContext';
-export { AuthProvider, useAuth };
+import { PostProvider, usePost } from './post/postContext';
+export { AuthProvider, useAuth, PostProvider, usePost };
