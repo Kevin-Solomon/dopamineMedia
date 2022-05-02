@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import {
   Input,
   FormControl,
@@ -27,11 +27,16 @@ import {
 } from '@chakra-ui/react';
 import Navbar from '../../../components/Navbar/Navbar';
 import { postUser } from '../../../service/postUser';
-import { useAuth } from '../../../context';
+import { useAuth, useBookmark, usePost } from '../../../context';
 import { getIcons } from '../../../util/getIcons';
+import Post from '../../../components/Post/Post';
 
 function Profile() {
+  const location = useLocation();
   const { authState, authDispatch } = useAuth();
+  const { bookmarkState } = useBookmark();
+  const { postState } = usePost();
+  console.log(postState);
   console.log(authState);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isLessThan640] = useMediaQuery('(max-width:640px)');
@@ -62,6 +67,15 @@ function Profile() {
     };
     getUser();
   }, []);
+  const getIndex = () => {
+    if (location.pathname.includes('bookmark')) return 1;
+    if (location.pathname.includes('tagged')) return 0;
+    return 0;
+  };
+  console.log('hi');
+  const bookmarkPost = postState.posts.filter(val =>
+    bookmarkState.includes(val._id)
+  );
   return (
     <Box>
       <Navbar />
@@ -90,7 +104,7 @@ function Profile() {
           </Box>
         </Box>
         <Divider marginTop="10px" color="black" />
-        <Tabs defaultIndex={0} isFitted marginTop="1rem">
+        <Tabs defaultIndex={getIndex()} isFitted marginTop="1rem">
           <TabList>
             <Tab>Posts</Tab>
             <Tab>Bookmark</Tab>
@@ -102,7 +116,16 @@ function Profile() {
               <p>All of the post</p>
             </TabPanel>
             <TabPanel>
-              <p>Bookmarked Post</p>
+              {bookmarkPost.map(({ username, likes, content, _id, img }) => (
+                <Post
+                  key={_id}
+                  username={username}
+                  likes={likes}
+                  content={content}
+                  img={img}
+                  _id={_id}
+                />
+              ))}
             </TabPanel>
             <TabPanel>
               <p>Tagged Posts</p>
