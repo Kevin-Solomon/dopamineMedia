@@ -17,7 +17,7 @@ const getIcons = (type, size) => {
   switch (type) {
     case 'LIKE_FILL':
       return (
-        <span style={style}>
+        <span style={{ ...style, color: 'red' }}>
           <AiFillHeart />
         </span>
       );

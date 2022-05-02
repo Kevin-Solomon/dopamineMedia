@@ -18,10 +18,13 @@ import {
   PopoverTrigger,
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
+import LikedBy from '../LikedBy/LikedBy';
+import { addToLike } from '../../service/addToLike';
 import { useAuth, usePost } from '../../context';
 import { getIcons } from '../../util/getIcons';
 import { deletePost } from './../../service/deletePost';
 import { updatePost } from './../../service';
+import { removeFromLike } from './../../service';
 function Post({ username, likes, content, img, _id }) {
   const [editable, setEditable] = useState(false);
   const [post, setPost] = useState({ content: content, img: img });
@@ -110,12 +113,41 @@ function Post({ username, likes, content, img, _id }) {
         ) : null}
         <Box d="flex" justifyContent="space-between">
           <Box d="flex">
-            {getIcons('OUTLINE_HEART', '27px')}
+            <Box>
+              {likes.likedBy.some(
+                user => user.username === authState.user.username
+              ) ? (
+                <Box
+                  onClick={() => {
+                    console.log('add to like');
+                    removeFromLike(_id, authState.token, postDispatch);
+                  }}
+                >
+                  {getIcons('LIKE_FILL', '27px')}
+                </Box>
+              ) : (
+                <Box
+                  onClick={() => {
+                    console.log('remove to like');
+                    addToLike(_id, authState.token, postDispatch);
+                  }}
+                >
+                  {getIcons('OUTLINE_HEART', '27px')}
+                </Box>
+              )}
+            </Box>
             {getIcons('COMMENT', '27px')}
           </Box>
           <Box>{getIcons('BOOKMARK', '27px')}</Box>
         </Box>
-        <Text>{likes.likeCount} likes</Text>
+        <Text>
+          {likes.likeCount === 0 ? (
+            'Be the first one to like '
+          ) : (
+            <LikedBy users={likes.likedBy} />
+          )}
+        </Text>
+        <Text></Text>
         <InputGroup size="md">
           <Input pr="4.5rem" placeholder="Add a comment..." />
           <InputRightElement width="4.5rem">
