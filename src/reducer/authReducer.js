@@ -15,6 +15,8 @@ const authReducer = (state, { type, payload }) => {
       return { user: payload.user, token: payload.token };
     case 'PERSIST':
       return { user: payload.user, token: payload.token };
+    case 'UPDATE_USER':
+      return { ...state, user: { ...payload } };
     default:
       new Error('error in auth reducer');
   }
