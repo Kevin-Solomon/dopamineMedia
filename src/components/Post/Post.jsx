@@ -20,12 +20,17 @@ import {
 import React, { useState } from 'react';
 import LikedBy from '../LikedBy/LikedBy';
 import { addToLike } from '../../service/addToLike';
-import { useAuth, usePost } from '../../context';
+import { useAuth, useBookmark, usePost } from '../../context';
 import { getIcons } from '../../util/getIcons';
 import { deletePost } from './../../service/deletePost';
 import { updatePost } from './../../service';
-import { removeFromLike } from './../../service';
+import {
+  removeFromLike,
+  addToBookmark,
+  removeFromBookmark,
+} from './../../service';
 function Post({ username, likes, content, img, _id }) {
+  const { bookmarkState, bookmarkDispatch } = useBookmark();
   const [editable, setEditable] = useState(false);
   const [post, setPost] = useState({ content: content, img: img });
   const { authState } = useAuth();
@@ -119,7 +124,6 @@ function Post({ username, likes, content, img, _id }) {
               ) ? (
                 <Box
                   onClick={() => {
-                    console.log('add to like');
                     removeFromLike(_id, authState.token, postDispatch);
                   }}
                 >
@@ -128,7 +132,6 @@ function Post({ username, likes, content, img, _id }) {
               ) : (
                 <Box
                   onClick={() => {
-                    console.log('remove to like');
                     addToLike(_id, authState.token, postDispatch);
                   }}
                 >
@@ -138,7 +141,26 @@ function Post({ username, likes, content, img, _id }) {
             </Box>
             {getIcons('COMMENT', '27px')}
           </Box>
-          <Box>{getIcons('BOOKMARK', '27px')}</Box>
+          <Box>
+            {bookmarkState.includes(_id) ? (
+              <Box
+                onClick={() => {
+                  removeFromBookmark(_id, authState.token, bookmarkDispatch);
+                }}
+              >
+                {getIcons('BOOKMARK_FILL', '27px')}
+              </Box>
+            ) : (
+              <Box
+                onClick={() => {
+                  addToBookmark(_id, authState.token, bookmarkDispatch);
+                }}
+              >
+                {' '}
+                {getIcons('BOOKMARK', '27px')}
+              </Box>
+            )}
+          </Box>
         </Box>
         <Text>
           {likes.likeCount === 0 ? (
