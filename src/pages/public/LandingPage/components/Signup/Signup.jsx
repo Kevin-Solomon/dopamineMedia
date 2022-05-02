@@ -7,11 +7,12 @@ import {
   Button,
   useToast,
 } from '@chakra-ui/react';
-
 import { formSubmitHandler } from './../../../../../service';
 import { useAuth } from '../../../../../context';
+import { useNavigate } from 'react-router-dom';
 function Signup() {
   const toast = useToast();
+  const navigate = useNavigate();
   const [user, setUser] = useState({ name: '', username: '', password: '' });
   const { authDispatch } = useAuth();
   const changeHandler = e => {
@@ -57,9 +58,11 @@ function Signup() {
         marginTop="10px"
         w="100%"
         colorScheme="blue"
-        onClick={() =>
-          formSubmitHandler('/api/auth/signup', user, authDispatch, toast)
-        }
+        onClick={e => {
+          e.preventDefault();
+          formSubmitHandler('/api/auth/signup', user, authDispatch, toast);
+          navigate('/');
+        }}
       >
         Sign Up
       </Button>

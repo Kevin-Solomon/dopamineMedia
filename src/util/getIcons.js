@@ -4,6 +4,7 @@ import {
   AiOutlineHome,
   AiFillHome,
   AiOutlineComment,
+  AiFillEdit,
 } from 'react-icons/ai';
 import {
   MdAddCircle,
@@ -85,6 +86,12 @@ const getIcons = (type, size) => {
       return (
         <span style={style}>
           <BsBookmarkFill />
+        </span>
+      );
+    case 'EDIT':
+      return (
+        <span style={style}>
+          <AiFillEdit />
         </span>
       );
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { addPost } from '../../service';
-import { Box, Input, Text, Textarea } from '@chakra-ui/react';
+import { Avatar, Box, Input, Text, Textarea } from '@chakra-ui/react';
 import { getIcons } from '../../util/getIcons';
 import {
   Modal,
@@ -19,14 +19,15 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import { useAuth, usePost } from '../../context';
-
+import { useNavigate } from 'react-router-dom';
 function Navbar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { authState } = useAuth();
   const { postDispatch } = usePost();
   const [post, setPost] = useState({ content: '', img: '' });
+  const navigate = useNavigate();
   const toast = useToast();
-
+  console.log(authState);
   return (
     <Box
       bg="#ffffff"
@@ -47,6 +48,14 @@ function Navbar() {
           <Box onClick={() => onOpen()}>{getIcons('ADD_OUTLINE', '27px')}</Box>
           <Box>{getIcons('EXPLORE_OUTLINE', '27px')}</Box>
           <Box>{getIcons('OUTLINE_HEART', '27px')}</Box>
+          <Avatar
+            cursor="pointer"
+            onClick={() => {
+              navigate(`/${authState.user._id}`);
+            }}
+            size="sm"
+            name={authState?.user?.name || authState?.user?.firstName}
+          />
         </Box>
       </Box>
       <Modal
