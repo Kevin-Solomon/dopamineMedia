@@ -7,10 +7,12 @@ import {
   Button,
   useToast,
 } from '@chakra-ui/react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from './../../../../../context';
 import { formSubmitHandler } from './../../../../../service';
 function Login() {
   const toast = useToast();
+  const navigate = useNavigate();
   const [user, setUser] = useState({ username: '', password: '' });
   const changeHandler = e => {
     setUser(prevState => ({ ...prevState, [e.target.name]: e.target.value }));
@@ -43,9 +45,11 @@ function Login() {
         marginTop="10px"
         w="100%"
         colorScheme="blue"
-        onClick={() =>
-          formSubmitHandler('/api/auth/login', user, authDispatch, toast)
-        }
+        onClick={e => {
+          e.preventDefault();
+          formSubmitHandler('/api/auth/login', user, authDispatch, toast);
+          navigate('/');
+        }}
       >
         Login
       </Button>
