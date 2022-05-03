@@ -56,17 +56,18 @@ function Profile() {
   });
   const { userId } = useParams();
   useEffect(() => {
+    console.log('asdasd');
     const getUser = async () => {
       const response = await axios({
         method: 'GET',
         url: `/api/users/${userId}`,
       });
-      console.log(response);
+      console.log(response, 'response');
       setUser(prevPost => ({ ...prevPost, ...response.data.user }));
       setEditUser(prevPost => ({ ...prevPost, ...response.data.user }));
     };
     getUser();
-  }, []);
+  }, [userId]);
   const getIndex = () => {
     if (location.pathname.includes('bookmark')) return 1;
     if (location.pathname.includes('tagged')) return 0;
