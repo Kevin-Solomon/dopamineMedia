@@ -85,7 +85,9 @@ function Profile() {
           <Box d="flex" gap="1rem" flexDirection="column">
             <Box d="flex" alignItems="center" gap="1rem">
               <Text fontSize="2xl">{user.username}</Text>
-              <Box onClick={onOpen}>{getIcons('EDIT', '27px')}</Box>
+              {authState.user._id === userId ? (
+                <Box onClick={onOpen}>{getIcons('EDIT', '27px')}</Box>
+              ) : null}
             </Box>
 
             <Box d="flex" gap="1rem">

@@ -17,7 +17,7 @@ import {
   PopoverBody,
   PopoverTrigger,
 } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import LikedBy from '../LikedBy/LikedBy';
 import { addToLike } from '../../service/addToLike';
 import { useAuth, useBookmark, usePost } from '../../context';
@@ -29,12 +29,27 @@ import {
   addToBookmark,
   removeFromBookmark,
 } from './../../service';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
 function Post({ username, likes, content, img, _id }) {
   const { bookmarkState, bookmarkDispatch } = useBookmark();
   const [editable, setEditable] = useState(false);
   const [post, setPost] = useState({ content: content, img: img });
+  const [postAuthor, setAuthor] = useState({ _id: '' });
   const { authState } = useAuth();
   const { postDispatch } = usePost();
+  console.log(postAuthor);
+  useEffect(() => {
+    async function getUsers() {
+      const response = await axios({ method: 'GET', url: '/api/users' });
+      const user = response.data.users.filter(
+        user => user.username === username
+      );
+      console.log(user);
+      setAuthor(user[0]);
+    }
+    getUsers();
+  }, [authState.token]);
   return (
     <Box w="100%" margin="10px auto" backgroundColor="#ffffff">
       <Box
@@ -47,11 +62,14 @@ function Post({ username, likes, content, img, _id }) {
       >
         <Box d="flex" justifyContent="space-between">
           <Box>
-            <Avatar
-              size="sm"
-              name={username}
-              src="hdttps://bit.ly/kent-c-dodds"
-            />
+            <Link to={`/${postAuthor._id}`}>
+              <Avatar
+                size="sm"
+                name={username}
+                src="hdttps://bit.ly/kent-c-dodds"
+              />
+            </Link>
+
             <Text>{username}</Text>
           </Box>
           <Popover>
