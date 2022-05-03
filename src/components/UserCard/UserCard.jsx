@@ -2,6 +2,7 @@ import React from 'react';
 import { Box, Avatar, Button, Text, Heading } from '@chakra-ui/react';
 import { addToFollowers } from './../../service';
 import { useAuth, useFollowers } from '../../context';
+import { Link } from 'react-router-dom';
 function UserCard({ username, img, _id }) {
   const { followerState, followerDispatch } = useFollowers();
   const { authState } = useAuth();
@@ -14,8 +15,13 @@ function UserCard({ username, img, _id }) {
       justifyContent="space-between"
     >
       <Box d="flex" gap="10px" alignItems="center">
-        <Avatar size="sm" name={username} />
-        <Text>{username}</Text>
+        <Link to={`/${_id}`}>
+          <Avatar size="sm" name={username} />
+        </Link>
+
+        <Link to={`/${_id}`}>
+          <Text>{username}</Text>
+        </Link>
       </Box>
       <Box order="1">
         <Button
