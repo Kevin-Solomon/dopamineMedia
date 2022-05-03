@@ -7,7 +7,9 @@ import { removeFromLike } from './removeFromLike';
 import { postUser } from './postUser';
 import { addToBookmark } from './addToBookmark';
 import { removeFromBookmark } from './removeFromBookmark';
+import { addToFollowers } from './addToFollowers';
 export {
+  addToFollowers,
   removeFromBookmark,
   addToBookmark,
   postUser,

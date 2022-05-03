@@ -46,4 +46,40 @@ export const posts = [
     createdAt: formatDate(),
     updatedAt: formatDate(),
   },
+  {
+    _id: '8297dd',
+    content: 'At vero eos et accusa',
+    likes: {
+      likeCount: 0,
+      likedBy: [],
+      dislikedBy: [],
+    },
+    username: 'levi',
+    createdAt: formatDate(),
+    updatedAt: formatDate(),
+  },
+  {
+    _id: '87dd',
+    content: 'At vero eos addadet accusa',
+    likes: {
+      likeCount: 0,
+      likedBy: [],
+      dislikedBy: [],
+    },
+    username: 'eren',
+    createdAt: formatDate(),
+    updatedAt: formatDate(),
+  },
+  {
+    _id: '829cvx',
+    content: 'At vero eos addadet accusa',
+    likes: {
+      likeCount: 0,
+      likedBy: [],
+      dislikedBy: [],
+    },
+    username: 'kevinsolomon2k',
+    createdAt: formatDate(),
+    updatedAt: formatDate(),
+  },
 ];

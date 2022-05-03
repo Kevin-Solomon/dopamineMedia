@@ -37,7 +37,7 @@ export const users = [
     bio: '',
   },
   {
-    _id: '3daszcc',
+    _id: '3dascvs4zcc',
     firstName: 'Levi',
     lastName: 'Ackerman',
     username: 'levi',
@@ -45,5 +45,15 @@ export const users = [
     createdAt: formatDate(),
     updatedAt: formatDate(),
     bio: 'Scout Regiment',
+  },
+  {
+    _id: '3dasasdzcc',
+    firstName: 'Eren',
+    lastName: 'Yeager',
+    username: 'eren',
+    password: 'mikasa',
+    createdAt: formatDate(),
+    updatedAt: formatDate(),
+    bio: 'Titan',
   },
 ];
