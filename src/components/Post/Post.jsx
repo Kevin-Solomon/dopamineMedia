@@ -20,11 +20,12 @@ import {
 import React, { useState, useEffect } from 'react';
 import LikedBy from '../LikedBy/LikedBy';
 import { addToLike } from '../../service/addToLike';
-import { useAuth, useBookmark, usePost } from '../../context';
+import { useAuth, useBookmark, useFollowers, usePost } from '../../context';
 import { getIcons } from '../../util/getIcons';
 import { deletePost } from './../../service/deletePost';
 import { updatePost } from './../../service';
 import {
+  removeFromFollow,
   removeFromLike,
   addToBookmark,
   removeFromBookmark,
@@ -32,6 +33,7 @@ import {
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 function Post({ username, likes, content, img, _id }) {
+  const { followerState, followerDispatch } = useFollowers();
   const { bookmarkState, bookmarkDispatch } = useBookmark();
   const [editable, setEditable] = useState(false);
   const [post, setPost] = useState({ content: content, img: img });
@@ -81,7 +83,20 @@ function Post({ username, likes, content, img, _id }) {
               <PopoverCloseButton />
               <PopoverHeader>Post Actions</PopoverHeader>
               <PopoverBody>
-                <Text cursor="pointer">Follow/ Unfollow</Text>
+                {authState.user.username === username ? null : (
+                  <Text
+                    cursor="pointer"
+                    onClick={() => {
+                      removeFromFollow(
+                        postAuthor._id,
+                        authState.token,
+                        followerDispatch
+                      );
+                    }}
+                  >
+                    Unfollow
+                  </Text>
+                )}
                 <Text cursor="pointer">Go To Post</Text>
                 {authState.user.username === username ? (
                   <Text
