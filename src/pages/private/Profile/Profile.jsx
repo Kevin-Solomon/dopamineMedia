@@ -27,12 +27,13 @@ import {
 } from '@chakra-ui/react';
 import Navbar from '../../../components/Navbar/Navbar';
 import { postUser } from '../../../service/postUser';
-import { useAuth, useBookmark, usePost } from '../../../context';
+import { useAuth, useBookmark, useFollowers, usePost } from '../../../context';
 import { getIcons } from '../../../util/getIcons';
 import Post from '../../../components/Post/Post';
-
+import { removeFromFollow, addToFollowers } from './../../../service';
 function Profile() {
   const location = useLocation();
+  const { followerState, followerDispatch } = useFollowers();
   const { authState, authDispatch } = useAuth();
   const { bookmarkState } = useBookmark();
   const { postState } = usePost();
@@ -89,6 +90,27 @@ function Profile() {
               {authState.user._id === userId ? (
                 <Box onClick={onOpen}>{getIcons('EDIT', '27px')}</Box>
               ) : null}
+              {followerState.includes(user.username) ? (
+                <Button
+                  bg="red.600"
+                  color="white"
+                  onClick={() => {
+                    removeFromFollow(userId, authState.token, followerDispatch);
+                  }}
+                >
+                  Unfollow
+                </Button>
+              ) : (
+                <Button
+                  bg="red.600"
+                  color="white"
+                  onClick={() => {
+                    addToFollowers(userId, authState.token, followerDispatch);
+                  }}
+                >
+                  Follow
+                </Button>
+              )}
             </Box>
 
             <Box d="flex" gap="1rem">
