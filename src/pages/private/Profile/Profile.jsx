@@ -27,12 +27,13 @@ import {
 } from '@chakra-ui/react';
 import Navbar from '../../../components/Navbar/Navbar';
 import { postUser } from '../../../service/postUser';
-import { useAuth, useBookmark, usePost } from '../../../context';
+import { useAuth, useBookmark, useFollowers, usePost } from '../../../context';
 import { getIcons } from '../../../util/getIcons';
 import Post from '../../../components/Post/Post';
-
+import { removeFromFollow, addToFollowers } from './../../../service';
 function Profile() {
   const location = useLocation();
+  const { followerState, followerDispatch } = useFollowers();
   const { authState, authDispatch } = useAuth();
   const { bookmarkState } = useBookmark();
   const { postState } = usePost();
@@ -56,17 +57,18 @@ function Profile() {
   });
   const { userId } = useParams();
   useEffect(() => {
+    console.log('asdasd');
     const getUser = async () => {
       const response = await axios({
         method: 'GET',
         url: `/api/users/${userId}`,
       });
-      console.log(response);
+      console.log(response, 'response');
       setUser(prevPost => ({ ...prevPost, ...response.data.user }));
       setEditUser(prevPost => ({ ...prevPost, ...response.data.user }));
     };
     getUser();
-  }, []);
+  }, [userId]);
   const getIndex = () => {
     if (location.pathname.includes('bookmark')) return 1;
     if (location.pathname.includes('tagged')) return 0;
@@ -85,7 +87,30 @@ function Profile() {
           <Box d="flex" gap="1rem" flexDirection="column">
             <Box d="flex" alignItems="center" gap="1rem">
               <Text fontSize="2xl">{user.username}</Text>
-              <Box onClick={onOpen}>{getIcons('EDIT', '27px')}</Box>
+              {authState.user._id === userId ? (
+                <Box onClick={onOpen}>{getIcons('EDIT', '27px')}</Box>
+              ) : null}
+              {followerState.includes(user.username) ? (
+                <Button
+                  bg="red.600"
+                  color="white"
+                  onClick={() => {
+                    removeFromFollow(userId, authState.token, followerDispatch);
+                  }}
+                >
+                  Unfollow
+                </Button>
+              ) : (
+                <Button
+                  bg="red.600"
+                  color="white"
+                  onClick={() => {
+                    addToFollowers(userId, authState.token, followerDispatch);
+                  }}
+                >
+                  Follow
+                </Button>
+              )}
             </Box>
 
             <Box d="flex" gap="1rem">
