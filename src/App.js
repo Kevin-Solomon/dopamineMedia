@@ -9,6 +9,7 @@ function App() {
       <Route path="/auth" element={<LandingPage />} />
       <Route path="/" element={<Home />} />
       <Route path="/:userId" element={<Profile />} />
+      <Route path="/:userId/bookmarks" element={<Profile />} />
     </Routes>
   );
 }
