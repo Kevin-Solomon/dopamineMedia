@@ -18,6 +18,8 @@ import {
   PopoverTrigger,
 } from '@chakra-ui/react';
 import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { addToLike as dispatchLike } from '../../feature/like/likeSlice';
 import LikedBy from '../LikedBy/LikedBy';
 import { addToLike } from '../../service/addToLike';
 import { useAuth, useBookmark, useFollowers, usePost } from '../../context';
@@ -33,6 +35,10 @@ import {
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 function Post({ username, likes, content, img, _id }) {
+  const likedPost = useSelector(state => state.likes);
+  console.log(likedPost);
+  console.log(dispatchLike);
+  const likeDispatch = useDispatch();
   const { followerState, followerDispatch } = useFollowers();
   const { bookmarkState, bookmarkDispatch } = useBookmark();
   const [editable, setEditable] = useState(false);
@@ -166,6 +172,7 @@ function Post({ username, likes, content, img, _id }) {
                 <Box
                   onClick={() => {
                     addToLike(_id, authState.token, postDispatch);
+                    likeDispatch(dispatchLike(_id));
                   }}
                 >
                   {getIcons('OUTLINE_HEART', '27px')}

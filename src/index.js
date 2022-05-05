@@ -12,6 +12,8 @@ import {
   FollowerProvider,
   PostProvider,
 } from './context/';
+import { Provider } from 'react-redux';
+import { store } from './store/store';
 // Call make Server
 makeServer();
 
@@ -23,7 +25,9 @@ ReactDOM.render(
           <PostProvider>
             <BookmarkProvider>
               <FollowerProvider>
-                <App />
+                <Provider store={store}>
+                  <App />
+                </Provider>
               </FollowerProvider>
             </BookmarkProvider>
           </PostProvider>
