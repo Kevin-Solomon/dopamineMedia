@@ -16,23 +16,23 @@ import { Provider } from 'react-redux';
 import { store } from './store/store';
 // Call make Server
 makeServer();
-
+console.log(store);
 ReactDOM.render(
   <React.StrictMode>
     <ChakraProvider>
-      <BrowserRouter>
-        <AuthProvider>
-          <PostProvider>
-            <BookmarkProvider>
-              <FollowerProvider>
-                <Provider store={store}>
+      <Provider store={store}>
+        <BrowserRouter>
+          <AuthProvider>
+            <PostProvider>
+              <BookmarkProvider>
+                <FollowerProvider>
                   <App />
-                </Provider>
-              </FollowerProvider>
-            </BookmarkProvider>
-          </PostProvider>
-        </AuthProvider>
-      </BrowserRouter>
+                </FollowerProvider>
+              </BookmarkProvider>
+            </PostProvider>
+          </AuthProvider>
+        </BrowserRouter>
+      </Provider>
     </ChakraProvider>
   </React.StrictMode>,
   document.getElementById('root')

@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
-import likeReducer from './../feature/like/likeSlice';
+import postReducer from '../feature/post/postSlice';
 export const store = configureStore({
-  reducer: { like: likeReducer },
+  reducer: { post: postReducer },
 });
 console.log(store);
