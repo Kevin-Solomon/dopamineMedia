@@ -10,6 +10,8 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from './../../../../../context';
 import { formSubmitHandler } from './../../../../../service';
+import { loginUser } from './../../../../../feature/auth/authSlice';
+import { useDispatch } from 'react-redux';
 function Login() {
   const toast = useToast();
   const navigate = useNavigate();
@@ -18,9 +20,10 @@ function Login() {
     setUser(prevState => ({ ...prevState, [e.target.name]: e.target.value }));
   };
   const { authState, authDispatch } = useAuth();
+  const dispatch = useDispatch();
   return (
     <FormControl>
-      <FormLabel htmlFor="username">Username</FormLabel>
+      <FormLabel htmlFor="usernam e">Username</FormLabel>
       <Input
         id="username"
         name="username"
@@ -47,6 +50,7 @@ function Login() {
         colorScheme="blue"
         onClick={e => {
           e.preventDefault();
+          dispatch(loginUser(user));
           formSubmitHandler('/api/auth/login', user, authDispatch, toast);
           navigate('/');
         }}
