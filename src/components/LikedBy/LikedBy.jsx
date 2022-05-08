@@ -1,7 +1,6 @@
 import React from 'react';
 import { AvatarGroup, Avatar, Text, Box } from '@chakra-ui/react';
 function LikedBy({ users }) {
-  console.log(users);
   return (
     <Box d="flex" alignItems="center" gap="5px">
       <AvatarGroup size="sm" max={3}>

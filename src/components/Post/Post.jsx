@@ -19,12 +19,13 @@ import {
 } from '@chakra-ui/react';
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { deletePost } from '../../feature/post/postSlice';
 import { addToLike as dispatchLike } from '../../feature/post/postSlice';
 import LikedBy from '../LikedBy/LikedBy';
 import { addToLike } from '../../service/addToLike';
 import { useAuth, useBookmark, useFollowers, usePost } from '../../context';
 import { getIcons } from '../../util/getIcons';
-import { deletePost } from './../../service/deletePost';
+// import { deletePost } from './../../service/deletePost';
 import { updatePost } from './../../service';
 import {
   removeFromFollow,
@@ -36,9 +37,8 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 function Post({ username, likes, content, img, _id }) {
   const postState = useSelector(state => state.post);
-  console.log(postState);
 
-  const likeDispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const { followerState, followerDispatch } = useFollowers();
   const { bookmarkState, bookmarkDispatch } = useBookmark();
@@ -47,14 +47,14 @@ function Post({ username, likes, content, img, _id }) {
   const [postAuthor, setAuthor] = useState({ _id: '' });
   const { authState } = useAuth();
   const { postDispatch } = usePost();
-  console.log(postAuthor);
+
   useEffect(() => {
     async function getUsers() {
       const response = await axios({ method: 'GET', url: '/api/users' });
       const user = response.data.users.filter(
         user => user.username === username
       );
-      console.log(user);
+
       setAuthor(user[0]);
     }
     getUsers();
@@ -109,7 +109,7 @@ function Post({ username, likes, content, img, _id }) {
                   <Text
                     cursor="pointer"
                     onClick={() => {
-                      deletePost(authState.token, _id, postDispatch);
+                      dispatch(deletePost({ _id, token: authState.token }));
                     }}
                   >
                     Delete Post

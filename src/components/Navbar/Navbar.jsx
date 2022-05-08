@@ -20,6 +20,8 @@ import {
 } from '@chakra-ui/react';
 import { useAuth, usePost } from '../../context';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { addPostFunction } from './../../feature/post/postSlice';
 function Navbar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { authState } = useAuth();
@@ -27,7 +29,8 @@ function Navbar() {
   const [post, setPost] = useState({ content: '', img: '' });
   const navigate = useNavigate();
   const toast = useToast();
-  console.log(authState);
+
+  const dispatch = useDispatch();
   return (
     <Box
       bg="#ffffff"
@@ -132,7 +135,8 @@ function Navbar() {
             <Button
               colorScheme="blue"
               onClick={() => {
-                addPost(authState.token, post, postDispatch, toast);
+                // addPost(authState.token, post, postDispatch, toast);
+                dispatch(addPostFunction({ post, token: authState.token }));
                 setPost({ caption: '', img: '' });
                 onClose();
               }}

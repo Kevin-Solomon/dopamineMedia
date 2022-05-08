@@ -6,7 +6,7 @@ import FollowerList from '../FollowerList/FollowerList';
 function PostListing() {
   const { postState } = usePost();
   const { followerState } = useFollowers();
-  console.log(followerState);
+
   const { authState } = useAuth();
   const userPost = postState.posts.filter(
     post => post.username === authState.user.username
@@ -15,7 +15,6 @@ function PostListing() {
     followerState.includes(post.username)
   );
 
-  console.log(postList);
   return (
     <Box d="flex" gap="0.5rem">
       <Box

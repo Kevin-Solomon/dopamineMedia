@@ -10,17 +10,55 @@ export const getAllPost = createAsyncThunk('post/getAllPost', async () => {
   console.log(response);
   return response.data.posts;
 });
-export const addPost = createAsyncThunk(
+export const addPostFunction = createAsyncThunk(
   'post/addPost',
-  async (postData, token) => {
-    const response = await axios({
-      method: 'POST',
-      url: '/api/posts',
-      headers: { authorization: token },
-      data: { postData },
-    });
-    console.log(response);
-    return response.data.posts;
+  async ({ post, token }) => {
+    try {
+      const response = await axios({
+        method: 'POST',
+        url: '/api/posts',
+        headers: { authorization: token },
+        data: { postData: post },
+      });
+
+      return response.data.posts;
+    } catch (err) {
+      return err;
+    }
+  }
+);
+export const deletePost = createAsyncThunk(
+  'post/deletePost',
+  async ({ _id, token }) => {
+    try {
+      console.log(_id);
+      const response = await axios({
+        method: 'DELETE',
+        url: `/api/posts/${_id}`,
+        headers: { authorization: token },
+      });
+      console.log(response);
+      return response.data.posts;
+    } catch (err) {
+      return err;
+    }
+  }
+);
+export const editPost = createAsyncThunk(
+  'post/editPost',
+  async ({ _id, data, token }) => {
+    try {
+      const response = await axios({
+        method: 'POST',
+        url: `/api/posts/edit/${_id}`,
+        headers: { authorization: token },
+        data: { postData: post },
+      });
+      console.log(response);
+      return response.data.posts;
+    } catch (err) {
+      return err;
+    }
   }
 );
 export const postSlice = createSlice({
@@ -39,16 +77,39 @@ export const postSlice = createSlice({
       state.loading = false;
       state.error = true;
     },
-    [addPost.pending]: state => {
+    [addPostFunction.pending]: state => {
       state.loading = true;
     },
-    [addPost.fulfilled]: (state, payload) => {
+    [addPostFunction.fulfilled]: (state, { payload }) => {
+      console.log(payload);
       state.loading = false;
-      state.post = [...payload];
+      state.post = payload;
     },
-    [addPost.rejected]: (state, payload) => {
+    [addPostFunction.rejected]: state => {
       state.loading = false;
       state.error = true;
+    },
+    [deletePost.pending]: state => {
+      state.loading = true;
+    },
+    [deletePost.fulfilled]: (state, { payload }) => {
+      state.loading = false;
+      state.post = payload;
+    },
+    [deletePost.rejected]: state => {
+      state.loading = false;
+      state.error = true;
+    },
+    [editPost.rejected]: state => {
+      state.loading = false;
+      state.error = true;
+    },
+    [editPost.pending]: state => {
+      state.loading = true;
+    },
+    [editPost.fulfilled]: state => {
+      state.loading = false;
+      state.post = payload;
     },
   },
 });
