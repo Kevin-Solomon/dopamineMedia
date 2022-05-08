@@ -13,6 +13,7 @@ export const getAllPost = createAsyncThunk('post/getAllPost', async () => {
 export const addPostFunction = createAsyncThunk(
   'post/addPost',
   async ({ post, token }) => {
+    console.log(token);
     try {
       const response = await axios({
         method: 'POST',

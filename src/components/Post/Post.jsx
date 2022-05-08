@@ -26,7 +26,6 @@ import LikedBy from '../LikedBy/LikedBy';
 import { addToLike } from '../../service/addToLike';
 import { useAuth, useBookmark, useFollowers, usePost } from '../../context';
 import { getIcons } from '../../util/getIcons';
-// import { deletePost } from './../../service/deletePost';
 import { updatePost } from './../../service';
 import {
   removeFromFollow,
@@ -38,7 +37,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 function Post({ username, likes, content, img, _id }) {
   const postState = useSelector(state => state.post);
-
+  const { user, token } = useSelector(state => state.auth);
   const dispatch = useDispatch();
 
   const { followerState, followerDispatch } = useFollowers();
@@ -106,7 +105,7 @@ function Post({ username, likes, content, img, _id }) {
                   </Text>
                 )}
                 <Text cursor="pointer">Go To Post</Text>
-                {authState.user.username === username ? (
+                {user.username === username ? (
                   <Text
                     cursor="pointer"
                     onClick={() => {
@@ -116,7 +115,7 @@ function Post({ username, likes, content, img, _id }) {
                     Delete Post
                   </Text>
                 ) : null}
-                {authState.user.username === username ? (
+                {user.username === username ? (
                   <Text
                     cursor="pointer"
                     onClick={() => {
@@ -150,8 +149,7 @@ function Post({ username, likes, content, img, _id }) {
         {editable ? (
           <Button
             onClick={() => {
-              dispatch(editPost({ _id, data: post, token: authState.token }));
-              updatePost(_id, post, authState.token, postDispatch);
+              dispatch(editPost({ _id, data: post, token }));
               setEditable(false);
             }}
           >
@@ -161,12 +159,10 @@ function Post({ username, likes, content, img, _id }) {
         <Box d="flex" justifyContent="space-between">
           <Box d="flex">
             <Box>
-              {likes.likedBy.some(
-                user => user.username === authState.user.username
-              ) ? (
+              {likes.likedBy.some(users => users.username === user.username) ? (
                 <Box
                   onClick={() => {
-                    removeFromLike(_id, authState.token, postDispatch);
+                    removeFromLike(_id, token, postDispatch);
                   }}
                 >
                   {getIcons('LIKE_FILL', '27px')}
@@ -174,7 +170,7 @@ function Post({ username, likes, content, img, _id }) {
               ) : (
                 <Box
                   onClick={() => {
-                    addToLike(_id, authState.token, postDispatch);
+                    addToLike(_id, token, postDispatch);
                   }}
                 >
                   {getIcons('OUTLINE_HEART', '27px')}
@@ -187,7 +183,7 @@ function Post({ username, likes, content, img, _id }) {
             {bookmarkState.includes(_id) ? (
               <Box
                 onClick={() => {
-                  removeFromBookmark(_id, authState.token, bookmarkDispatch);
+                  removeFromBookmark(_id, token, bookmarkDispatch);
                 }}
               >
                 {getIcons('BOOKMARK_FILL', '27px')}
@@ -195,7 +191,7 @@ function Post({ username, likes, content, img, _id }) {
             ) : (
               <Box
                 onClick={() => {
-                  addToBookmark(_id, authState.token, bookmarkDispatch);
+                  addToBookmark(_id, token, bookmarkDispatch);
                 }}
               >
                 {' '}
