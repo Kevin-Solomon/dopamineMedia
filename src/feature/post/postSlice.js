@@ -52,7 +52,7 @@ export const editPost = createAsyncThunk(
         method: 'POST',
         url: `/api/posts/edit/${_id}`,
         headers: { authorization: token },
-        data: { postData: post },
+        data: { postData: data },
       });
       console.log(response);
       return response.data.posts;
@@ -107,7 +107,7 @@ export const postSlice = createSlice({
     [editPost.pending]: state => {
       state.loading = true;
     },
-    [editPost.fulfilled]: state => {
+    [editPost.fulfilled]: (state, { payload }) => {
       state.loading = false;
       state.post = payload;
     },

@@ -20,6 +20,7 @@ import {
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { deletePost } from '../../feature/post/postSlice';
+import { editPost } from '../../feature/post/postSlice';
 import { addToLike as dispatchLike } from '../../feature/post/postSlice';
 import LikedBy from '../LikedBy/LikedBy';
 import { addToLike } from '../../service/addToLike';
@@ -149,6 +150,7 @@ function Post({ username, likes, content, img, _id }) {
         {editable ? (
           <Button
             onClick={() => {
+              dispatch(editPost({ _id, data: post, token: authState.token }));
               updatePost(_id, post, authState.token, postDispatch);
               setEditable(false);
             }}
