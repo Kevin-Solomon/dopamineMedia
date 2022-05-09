@@ -46,13 +46,13 @@ function Post({ username, likes, content, img, _id }) {
   console.log(token);
   const dispatch = useDispatch();
   console.log(bookmarkState);
-  const { followerState, followerDispatch } = useFollowers();
+  // const { followerState, followerDispatch } = useFollowers();
   // const { bookmarkState, bookmarkDispatch } = useBookmark();
   const [editable, setEditable] = useState(false);
   const [post, setPost] = useState({ content: content, img: img });
   const [postAuthor, setAuthor] = useState({ _id: '' });
-  const { authState } = useAuth();
-  const { postDispatch } = usePost();
+  // const { authState } = useAuth();
+  // const { postDispatch } = usePost();
 
   useEffect(() => {
     async function getUsers() {
@@ -64,7 +64,7 @@ function Post({ username, likes, content, img, _id }) {
       setAuthor(user[0]);
     }
     getUsers();
-  }, [authState.token]);
+  }, [user.token]);
   return (
     <Box w="100%" margin="10px auto" backgroundColor="#ffffff">
       <Box
@@ -96,13 +96,13 @@ function Post({ username, likes, content, img, _id }) {
               <PopoverCloseButton />
               <PopoverHeader>Post Actions</PopoverHeader>
               <PopoverBody>
-                {authState.user.username === username ? null : (
+                {user.username === username ? null : (
                   <Text
                     cursor="pointer"
                     onClick={() => {
                       removeFromFollow(
                         postAuthor._id,
-                        authState.token,
+                        user.token,
                         followerDispatch
                       );
                     }}

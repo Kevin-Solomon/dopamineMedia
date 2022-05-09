@@ -6,8 +6,7 @@ import { useAuth, useFollowers } from '../../context';
 import { Link } from 'react-router-dom';
 import { addFollowers } from '../../feature/followers/followerSlice';
 function UserCard({ username, img, _id }) {
-  const { followerState, followerDispatch } = useFollowers();
-  const { authState } = useAuth();
+  const { followers } = useSelector(state => state.followers);
   const dispatch = useDispatch();
   const { token } = useSelector(state => state.auth);
   return (
@@ -31,7 +30,6 @@ function UserCard({ username, img, _id }) {
         <Button
           onClick={() => {
             dispatch(addFollowers({ _id, token }));
-            // addToFollowers(_id, authState.token, followerDispatch);
           }}
           variant="ghost"
         >

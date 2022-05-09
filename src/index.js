@@ -22,15 +22,7 @@ ReactDOM.render(
     <ChakraProvider>
       <Provider store={store}>
         <BrowserRouter>
-          <AuthProvider>
-            <PostProvider>
-              <BookmarkProvider>
-                <FollowerProvider>
-                  <App />
-                </FollowerProvider>
-              </BookmarkProvider>
-            </PostProvider>
-          </AuthProvider>
+          <App />
         </BrowserRouter>
       </Provider>
     </ChakraProvider>

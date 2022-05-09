@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { addPost } from '../../service';
 import { Avatar, Box, Input, Text, Textarea } from '@chakra-ui/react';
 import { getIcons } from '../../util/getIcons';
 import {
@@ -18,14 +17,11 @@ import {
   Center,
   useToast,
 } from '@chakra-ui/react';
-import { useAuth, usePost } from '../../context';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { addPostFunction } from './../../feature/post/postSlice';
 function Navbar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { authState } = useAuth();
-  const { postDispatch } = usePost();
   const [post, setPost] = useState({ content: '', img: '' });
   const navigate = useNavigate();
   const toast = useToast();
