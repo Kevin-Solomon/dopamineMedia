@@ -25,29 +25,32 @@ export const getInitialBookmark = createAsyncThunk(
 
 export const addBookmark = createAsyncThunk(
   'bookmark/addBookmark',
-  async (_id, token) => {
+  async ({ _id, token }) => {
+    console.log(token);
     try {
       const response = await axios({
         method: 'POST',
         url: `/api/users/bookmark/${_id}`,
         headers: { authorization: token },
       });
-      return response.data.bookmark;
+
+      return response.data.bookmarks;
     } catch (err) {
-      console.log(err);
+      console.log(err.response);
     }
   }
 );
 export const deleteBookmark = createAsyncThunk(
   'bookmark/deleteBookmark',
-  async (_id, token) => {
+  async ({ _id, token }) => {
     try {
       const response = await axios({
         method: 'POST',
         url: `/api/users/remove-bookmark/${_id}`,
         headers: { authorization: token },
       });
-      return response.data.bookmark;
+      console.log(response);
+      return response.data.bookmarks;
     } catch (err) {
       console.log(err);
     }
@@ -84,11 +87,11 @@ const bookmarkSlice = createSlice({
     [deleteBookmark.pending]: state => {
       state.loading = true;
     },
-    [deleteBookmark.fulfilled]: (state, { payload }) => {
+    [deleteBookmark.fulfilled]: (state, action) => {
       state.loading = false;
-      state.bookmark = payload;
+      state.bookmark = action.payload;
     },
-    [deleteBookmark.fulfilled]: state => {
+    [deleteBookmark.rejected]: state => {
       state.loading = false;
       state.error = true;
     },

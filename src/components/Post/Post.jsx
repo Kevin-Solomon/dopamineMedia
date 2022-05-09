@@ -22,6 +22,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import { deletePost } from '../../feature/post/postSlice';
 import { editPost } from '../../feature/post/postSlice';
 import { addToLike as dispatchLike } from '../../feature/post/postSlice';
+import {
+  addBookmark,
+  deleteBookmark,
+} from './../../feature/bookmark/bookmarkSlice';
 import LikedBy from '../LikedBy/LikedBy';
 import { addToLike } from '../../service/addToLike';
 import { useAuth, useBookmark, useFollowers, usePost } from '../../context';
@@ -37,11 +41,13 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 function Post({ username, likes, content, img, _id }) {
   const postState = useSelector(state => state.post);
+  const bookmarkState = useSelector(state => state.bookmark);
   const { user, token } = useSelector(state => state.auth);
+  console.log(token);
   const dispatch = useDispatch();
-
+  console.log(bookmarkState);
   const { followerState, followerDispatch } = useFollowers();
-  const { bookmarkState, bookmarkDispatch } = useBookmark();
+  // const { bookmarkState, bookmarkDispatch } = useBookmark();
   const [editable, setEditable] = useState(false);
   const [post, setPost] = useState({ content: content, img: img });
   const [postAuthor, setAuthor] = useState({ _id: '' });
@@ -180,10 +186,10 @@ function Post({ username, likes, content, img, _id }) {
             {getIcons('COMMENT', '27px')}
           </Box>
           <Box>
-            {bookmarkState.includes(_id) ? (
+            {bookmarkState.bookmark.includes(_id) ? (
               <Box
                 onClick={() => {
-                  removeFromBookmark(_id, token, bookmarkDispatch);
+                  dispatch(deleteBookmark({ _id, token }));
                 }}
               >
                 {getIcons('BOOKMARK_FILL', '27px')}
@@ -191,7 +197,8 @@ function Post({ username, likes, content, img, _id }) {
             ) : (
               <Box
                 onClick={() => {
-                  addToBookmark(_id, token, bookmarkDispatch);
+                  dispatch(addBookmark({ _id, token }));
+                  // addToBookmark(_id, token, bookmarkDispatch);
                 }}
               >
                 {' '}
