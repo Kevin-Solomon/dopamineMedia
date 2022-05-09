@@ -1,11 +1,15 @@
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Box, Avatar, Button, Text, Heading } from '@chakra-ui/react';
 import { addToFollowers } from './../../service';
 import { useAuth, useFollowers } from '../../context';
 import { Link } from 'react-router-dom';
+import { addFollowers } from '../../feature/followers/followerSlice';
 function UserCard({ username, img, _id }) {
   const { followerState, followerDispatch } = useFollowers();
   const { authState } = useAuth();
+  const dispatch = useDispatch();
+  const { token } = useSelector(state => state.auth);
   return (
     <Box
       d="flex"
@@ -26,7 +30,8 @@ function UserCard({ username, img, _id }) {
       <Box order="1">
         <Button
           onClick={() => {
-            addToFollowers(_id, authState.token, followerDispatch);
+            dispatch(addFollowers({ _id, token }));
+            // addToFollowers(_id, authState.token, followerDispatch);
           }}
           variant="ghost"
         >

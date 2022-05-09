@@ -3,8 +3,10 @@ import { usePost, useAuth, useFollowers } from '../../../../../context';
 import { useSelector } from 'react-redux';
 import Post from './../../../../../components/Post/Post';
 import { Box } from '@chakra-ui/react';
+
 import FollowerList from '../FollowerList/FollowerList';
 function PostListing() {
+  const { followers } = useSelector(state => state.followers);
   const { postState } = usePost();
   const { followerState } = useFollowers();
   const { post, loading, error } = useSelector(state => state.post);
@@ -13,7 +15,7 @@ function PostListing() {
   const userPost = post.filter(
     post => post.username === authState.user.username
   );
-  const postList = post.filter(post => followerState.includes(post.username));
+  const postList = post.filter(post => followers.includes(post.username));
 
   return (
     <Box d="flex" gap="0.5rem">
