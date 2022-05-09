@@ -115,7 +115,8 @@ function Post({ username, likes, content, img, _id }) {
                   <Text
                     cursor="pointer"
                     onClick={() => {
-                      dispatch(deletePost({ _id, token: authState.token }));
+                      console.log('clciked');
+                      dispatch(deletePost({ _id, token }));
                     }}
                   >
                     Delete Post
