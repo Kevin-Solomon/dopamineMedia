@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { addPost } from '../../service';
 import { Avatar, Box, Input, Text, Textarea } from '@chakra-ui/react';
 import { getIcons } from '../../util/getIcons';
 import {
@@ -18,16 +17,18 @@ import {
   Center,
   useToast,
 } from '@chakra-ui/react';
-import { useAuth, usePost } from '../../context';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { addPostFunction } from './../../feature/post/postSlice';
 function Navbar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { authState } = useAuth();
-  const { postDispatch } = usePost();
   const [post, setPost] = useState({ content: '', img: '' });
   const navigate = useNavigate();
   const toast = useToast();
-  console.log(authState);
+  const {
+    auth: { token, user },
+  } = useSelector(state => state);
+  const dispatch = useDispatch();
   return (
     <Box
       bg="#ffffff"
@@ -54,20 +55,20 @@ function Navbar() {
               navigate(`/${authState.user._id}`);
             }}
             size="sm"
-            name={authState?.user?.name || authState?.user?.firstName}
+            name={user?.name || user?.firstName}
           />
         </Box>
       </Box>
       <Modal
         isOpen={isOpen}
         onClose={() => {
-          setPost({ caption: '', img: '' });
+          setPost({ content: '', img: '' });
           onClose();
         }}
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Modal Title</ModalHeader>
+          <ModalHeader>Post</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <FormLabel htmlFor="image">Click here</FormLabel>
@@ -121,8 +122,9 @@ function Navbar() {
             )}
             <Textarea
               marginTop="20px"
-              value={post.caption}
+              value={post.content}
               onChange={e => {
+                console.log('change', e.target.value);
                 setPost(prevPost => ({ ...prevPost, content: e.target.value }));
               }}
             />
@@ -132,8 +134,8 @@ function Navbar() {
             <Button
               colorScheme="blue"
               onClick={() => {
-                addPost(authState.token, post, postDispatch, toast);
-                setPost({ caption: '', img: '' });
+                dispatch(addPostFunction({ post, token }));
+                setPost({ content: '', img: '' });
                 onClose();
               }}
             >

@@ -7,12 +7,15 @@ import {
   Button,
   useToast,
 } from '@chakra-ui/react';
+import { signUpUser } from '../../../../../feature/auth/authSlice';
+import { useDispatch } from 'react-redux';
 import { formSubmitHandler } from './../../../../../service';
 import { useAuth } from '../../../../../context';
 import { useNavigate } from 'react-router-dom';
 function Signup() {
   const toast = useToast();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [user, setUser] = useState({ name: '', username: '', password: '' });
   const { authDispatch } = useAuth();
   const changeHandler = e => {
@@ -60,7 +63,8 @@ function Signup() {
         colorScheme="blue"
         onClick={e => {
           e.preventDefault();
-          formSubmitHandler('/api/auth/signup', user, authDispatch, toast);
+          dispatch(signUpUser(user));
+          // formSubmitHandler('/api/auth/signup', user, authDispatch, toast);
           navigate('/');
         }}
       >

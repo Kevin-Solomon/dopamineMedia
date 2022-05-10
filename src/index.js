@@ -12,23 +12,19 @@ import {
   FollowerProvider,
   PostProvider,
 } from './context/';
+import { Provider } from 'react-redux';
+import { store } from './store/store';
 // Call make Server
 makeServer();
 
 ReactDOM.render(
   <React.StrictMode>
     <ChakraProvider>
-      <BrowserRouter>
-        <AuthProvider>
-          <PostProvider>
-            <BookmarkProvider>
-              <FollowerProvider>
-                <App />
-              </FollowerProvider>
-            </BookmarkProvider>
-          </PostProvider>
-        </AuthProvider>
-      </BrowserRouter>
+      <Provider store={store}>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </Provider>
     </ChakraProvider>
   </React.StrictMode>,
   document.getElementById('root')

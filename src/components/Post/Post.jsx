@@ -18,11 +18,18 @@ import {
   PopoverTrigger,
 } from '@chakra-ui/react';
 import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { deletePost } from '../../feature/post/postSlice';
+import { editPost } from '../../feature/post/postSlice';
+import { addToLike, deleteFromLike } from '../../feature/post/postSlice';
+import {
+  addBookmark,
+  deleteBookmark,
+} from './../../feature/bookmark/bookmarkSlice';
 import LikedBy from '../LikedBy/LikedBy';
-import { addToLike } from '../../service/addToLike';
+// import { addToLike } from '../../service/addToLike';
 import { useAuth, useBookmark, useFollowers, usePost } from '../../context';
 import { getIcons } from '../../util/getIcons';
-import { deletePost } from './../../service/deletePost';
 import { updatePost } from './../../service';
 import {
   removeFromFollow,
@@ -33,25 +40,31 @@ import {
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 function Post({ username, likes, content, img, _id }) {
-  const { followerState, followerDispatch } = useFollowers();
-  const { bookmarkState, bookmarkDispatch } = useBookmark();
+  const postState = useSelector(state => state.post);
+  const bookmarkState = useSelector(state => state.bookmark);
+  const { user, token } = useSelector(state => state.auth);
+  console.log(token);
+  const dispatch = useDispatch();
+  console.log(bookmarkState);
+  // const { followerState, followerDispatch } = useFollowers();
+  // const { bookmarkState, bookmarkDispatch } = useBookmark();
   const [editable, setEditable] = useState(false);
   const [post, setPost] = useState({ content: content, img: img });
   const [postAuthor, setAuthor] = useState({ _id: '' });
-  const { authState } = useAuth();
-  const { postDispatch } = usePost();
-  console.log(postAuthor);
+  // const { authState } = useAuth();
+  // const { postDispatch } = usePost();
+
   useEffect(() => {
     async function getUsers() {
       const response = await axios({ method: 'GET', url: '/api/users' });
       const user = response.data.users.filter(
         user => user.username === username
       );
-      console.log(user);
+
       setAuthor(user[0]);
     }
     getUsers();
-  }, [authState.token]);
+  }, [user.token]);
   return (
     <Box w="100%" margin="10px auto" backgroundColor="#ffffff">
       <Box
@@ -83,13 +96,13 @@ function Post({ username, likes, content, img, _id }) {
               <PopoverCloseButton />
               <PopoverHeader>Post Actions</PopoverHeader>
               <PopoverBody>
-                {authState.user.username === username ? null : (
+                {user.username === username ? null : (
                   <Text
                     cursor="pointer"
                     onClick={() => {
                       removeFromFollow(
                         postAuthor._id,
-                        authState.token,
+                        user.token,
                         followerDispatch
                       );
                     }}
@@ -98,17 +111,18 @@ function Post({ username, likes, content, img, _id }) {
                   </Text>
                 )}
                 <Text cursor="pointer">Go To Post</Text>
-                {authState.user.username === username ? (
+                {user.username === username ? (
                   <Text
                     cursor="pointer"
                     onClick={() => {
-                      deletePost(authState.token, _id, postDispatch);
+                      console.log('clciked');
+                      dispatch(deletePost({ _id, token }));
                     }}
                   >
                     Delete Post
                   </Text>
                 ) : null}
-                {authState.user.username === username ? (
+                {user.username === username ? (
                   <Text
                     cursor="pointer"
                     onClick={() => {
@@ -142,7 +156,7 @@ function Post({ username, likes, content, img, _id }) {
         {editable ? (
           <Button
             onClick={() => {
-              updatePost(_id, post, authState.token, postDispatch);
+              dispatch(editPost({ _id, data: post, token }));
               setEditable(false);
             }}
           >
@@ -152,12 +166,11 @@ function Post({ username, likes, content, img, _id }) {
         <Box d="flex" justifyContent="space-between">
           <Box d="flex">
             <Box>
-              {likes.likedBy.some(
-                user => user.username === authState.user.username
-              ) ? (
+              {likes.likedBy.some(users => users.username === user.username) ? (
                 <Box
                   onClick={() => {
-                    removeFromLike(_id, authState.token, postDispatch);
+                    // removeFromLike(_id, token, postDispatch);
+                    dispatch(deleteFromLike({ _id, token }));
                   }}
                 >
                   {getIcons('LIKE_FILL', '27px')}
@@ -165,7 +178,8 @@ function Post({ username, likes, content, img, _id }) {
               ) : (
                 <Box
                   onClick={() => {
-                    addToLike(_id, authState.token, postDispatch);
+                    // addToLike(_id, token, postDispatch);
+                    dispatch(addToLike({ _id, token }));
                   }}
                 >
                   {getIcons('OUTLINE_HEART', '27px')}
@@ -175,10 +189,10 @@ function Post({ username, likes, content, img, _id }) {
             {getIcons('COMMENT', '27px')}
           </Box>
           <Box>
-            {bookmarkState.includes(_id) ? (
+            {bookmarkState.bookmark.includes(_id) ? (
               <Box
                 onClick={() => {
-                  removeFromBookmark(_id, authState.token, bookmarkDispatch);
+                  dispatch(deleteBookmark({ _id, token }));
                 }}
               >
                 {getIcons('BOOKMARK_FILL', '27px')}
@@ -186,7 +200,8 @@ function Post({ username, likes, content, img, _id }) {
             ) : (
               <Box
                 onClick={() => {
-                  addToBookmark(_id, authState.token, bookmarkDispatch);
+                  dispatch(addBookmark({ _id, token }));
+                  // addToBookmark(_id, token, bookmarkDispatch);
                 }}
               >
                 {' '}
