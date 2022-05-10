@@ -34,6 +34,7 @@ import {
   addFollowers,
   removeFromFollowers,
 } from './../../../feature/followers/followerSlice';
+import { editUserDetails } from './../../../feature/auth/authSlice';
 function Profile() {
   const dispatch = useDispatch();
   const { post } = useSelector(state => state);
@@ -81,51 +82,60 @@ function Profile() {
       <Navbar />
       <Box padding="0.8rem" maxW="800px" margin="4rem auto">
         <Box d="flex" gap={isLessThan640 ? '1rem' : '3rem'}>
-          <Avatar size={isLessThan640 ? 'xl' : '2xl'} name={user.username} />
+          <Avatar
+            size={isLessThan640 ? 'xl' : '2xl'}
+            name={auth.user.username}
+          />
           <Box d="flex" gap="1rem" flexDirection="column">
             <Box d="flex" alignItems="center" gap="1rem">
               <Text fontSize="2xl">{user.username}</Text>
               {auth.user._id === userId ? (
                 <Box onClick={onOpen}>{getIcons('EDIT', '27px')}</Box>
               ) : null}
-              {followers.followers.includes(user.username) ? (
-                <Button
-                  bg="red.600"
-                  color="white"
-                  onClick={() => {
-                    dispatch(
-                      removeFromFollowers({ _id: userId, token: auth.token })
-                    );
-                  }}
-                >
-                  Unfollow
-                </Button>
-              ) : (
-                <Button
-                  bg="red.600"
-                  color="white"
-                  onClick={() => {
-                    dispatch(addFollowers({ _id: userId, token: auth.token }));
-                  }}
-                >
-                  Follow
-                </Button>
-              )}
+              {auth.user._id !== userId ? (
+                followers.followers.includes(user.username) ? (
+                  <Button
+                    bg="red.600"
+                    color="white"
+                    onClick={() => {
+                      dispatch(
+                        removeFromFollowers({ _id: userId, token: auth.token })
+                      );
+                    }}
+                  >
+                    Unfollow
+                  </Button>
+                ) : (
+                  <Button
+                    bg="red.600"
+                    color="white"
+                    onClick={() => {
+                      dispatch(
+                        addFollowers({ _id: userId, token: auth.token })
+                      );
+                    }}
+                  >
+                    Follow
+                  </Button>
+                )
+              ) : null}
             </Box>
 
             <Box d="flex" gap="1rem">
               <Box as="span" d="flex" gap="3px">
-                <Text fontWeight="900">{user.posts}</Text>posts
+                <Text fontWeight="900">{auth.user.posts}</Text>posts
               </Box>
               <Box as="span" d="flex" gap="3px">
-                <Text fontWeight="900">{user.followers.length}</Text>followers
+                <Text fontWeight="900">{auth.user.followers.length}</Text>
+                followers
               </Box>
               <Box as="span" d="flex" gap="3px">
-                <Text fontWeight="700">{user.following.length} </Text>following
+                <Text fontWeight="700">{auth.user.following.length} </Text>
+                following
               </Box>
             </Box>
-            <Text>{`${user.firstName} ${user.lastName}`}</Text>
-            <Text>{user.bio}</Text>
+            <Text>{`${auth.user.firstName} ${auth.user.lastName}`}</Text>
+            <Text>{auth.user.bio}</Text>
           </Box>
         </Box>
         <Divider marginTop="10px" color="black" />
@@ -224,14 +234,9 @@ function Profile() {
             <Button
               onClick={e => {
                 e.preventDefault();
-                postUser(
-                  authState.token,
-                  editUser,
-                  setUser,
-                  setEditUser,
-                  authDispatch
+                dispatch(
+                  editUserDetails({ userData: editUser, token: auth.token })
                 );
-
                 onClose();
               }}
               colorScheme="blue"
