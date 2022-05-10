@@ -9,7 +9,6 @@ import {
 } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from './../../../../../context';
-import { formSubmitHandler } from './../../../../../service';
 import { loginUser } from './../../../../../feature/auth/authSlice';
 import { useDispatch } from 'react-redux';
 function Login({ prevpath }) {
@@ -51,7 +50,17 @@ function Login({ prevpath }) {
         colorScheme="blue"
         onClick={e => {
           e.preventDefault();
-          dispatch(loginUser(user)).then(res => navigate(prevpath || '/'));
+          dispatch(loginUser(user)).then(res => {
+            console.log(res);
+            toast({
+              title: 'Logged In Successfully',
+              description: `Welcome back, ${res.payload.user.firstName}`,
+              status: 'success',
+              duration: 5000,
+              isClosable: true,
+            });
+            navigate(prevpath || '/');
+          });
         }}
       >
         Login
