@@ -14,7 +14,7 @@ import { loginUser } from './../../../../../feature/auth/authSlice';
 import { useDispatch } from 'react-redux';
 function Login({ prevpath }) {
   const toast = useToast();
-
+  console.log(prevpath);
   const navigate = useNavigate();
   const [user, setUser] = useState({ username: '', password: '' });
   const changeHandler = e => {
@@ -51,10 +51,21 @@ function Login({ prevpath }) {
         colorScheme="blue"
         onClick={e => {
           e.preventDefault();
-          dispatch(loginUser(user)).then(res => navigate(prevpath));
+          dispatch(loginUser(user)).then(res => navigate(prevpath || '/'));
         }}
       >
         Login
+      </Button>
+      <Button
+        marginTop="10px"
+        w="100%"
+        colorScheme="blue"
+        onClick={e => {
+          e.preventDefault();
+          setUser({ username: 'adarshbalika', password: 'adarshBalika123' });
+        }}
+      >
+        Login with Test Credentials
       </Button>
     </FormControl>
   );
