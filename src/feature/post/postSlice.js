@@ -62,6 +62,36 @@ export const editPost = createAsyncThunk(
     }
   }
 );
+export const addToLike = createAsyncThunk(
+  'post/addLike',
+  async ({ _id, token }) => {
+    try {
+      const response = await axios({
+        method: 'POST',
+        url: `/api/posts/like/${_id}`,
+        headers: { authorization: token },
+      });
+      return response.data.posts;
+    } catch (err) {
+      console.error(err);
+    }
+  }
+);
+export const deleteFromLike = createAsyncThunk(
+  'post/deleteFromLike',
+  async ({ _id, token }) => {
+    try {
+      const response = await axios({
+        method: 'POST',
+        url: `/api/posts/dislike/${_id}`,
+        headers: { authorization: token },
+      });
+      return response.data.posts;
+    } catch (err) {
+      console.error(err);
+    }
+  }
+);
 export const postSlice = createSlice({
   name: 'post',
   initialState,
@@ -111,6 +141,28 @@ export const postSlice = createSlice({
     [editPost.fulfilled]: (state, { payload }) => {
       state.loading = false;
       state.post = payload;
+    },
+    [addToLike.pending]: state => {
+      state.loading = true;
+    },
+    [addToLike.rejected]: state => {
+      state.loading = false;
+      state.error = true;
+    },
+    [addToLike.fulfilled]: (state, { payload }) => {
+      state.post = payload;
+      state.loading = false;
+    },
+    [deleteFromLike.fulfilled]: (state, { payload }) => {
+      state.post = payload;
+      state.loading = false;
+    },
+    [deleteFromLike.pending]: state => {
+      state.loading = true;
+    },
+    [deleteFromLike.rejected]: state => {
+      state.loading = false;
+      state.error = true;
     },
   },
 });

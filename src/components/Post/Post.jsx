@@ -21,13 +21,13 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { deletePost } from '../../feature/post/postSlice';
 import { editPost } from '../../feature/post/postSlice';
-import { addToLike as dispatchLike } from '../../feature/post/postSlice';
+import { addToLike, deleteFromLike } from '../../feature/post/postSlice';
 import {
   addBookmark,
   deleteBookmark,
 } from './../../feature/bookmark/bookmarkSlice';
 import LikedBy from '../LikedBy/LikedBy';
-import { addToLike } from '../../service/addToLike';
+// import { addToLike } from '../../service/addToLike';
 import { useAuth, useBookmark, useFollowers, usePost } from '../../context';
 import { getIcons } from '../../util/getIcons';
 import { updatePost } from './../../service';
@@ -169,7 +169,8 @@ function Post({ username, likes, content, img, _id }) {
               {likes.likedBy.some(users => users.username === user.username) ? (
                 <Box
                   onClick={() => {
-                    removeFromLike(_id, token, postDispatch);
+                    // removeFromLike(_id, token, postDispatch);
+                    dispatch(deleteFromLike({ _id, token }));
                   }}
                 >
                   {getIcons('LIKE_FILL', '27px')}
@@ -177,7 +178,8 @@ function Post({ username, likes, content, img, _id }) {
               ) : (
                 <Box
                   onClick={() => {
-                    addToLike(_id, token, postDispatch);
+                    // addToLike(_id, token, postDispatch);
+                    dispatch(addToLike({ _id, token }));
                   }}
                 >
                   {getIcons('OUTLINE_HEART', '27px')}
