@@ -15,7 +15,6 @@ export const loginUser = createAsyncThunk(
         url: '/api/auth/login',
         data: { username, password },
       });
-      console.log(response);
       return {
         user: response.data.foundUser,
         token: response.data.encodedToken,
@@ -34,7 +33,6 @@ export const signUpUser = createAsyncThunk(
         url: '/api/auth/signup',
         data: { name, username, password },
       });
-      console.log(response);
       return {
         user: response.data.createdUser,
         token: response.data.encodedToken,

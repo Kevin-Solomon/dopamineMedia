@@ -16,7 +16,7 @@ import { Provider } from 'react-redux';
 import { store } from './store/store';
 // Call make Server
 makeServer();
-console.log(store);
+
 ReactDOM.render(
   <React.StrictMode>
     <ChakraProvider>
