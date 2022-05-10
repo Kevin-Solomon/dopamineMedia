@@ -27,11 +27,15 @@ import {
 } from '@chakra-ui/react';
 import Navbar from '../../../components/Navbar/Navbar';
 import { postUser } from '../../../service/postUser';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { getIcons } from '../../../util/getIcons';
 import Post from '../../../components/Post/Post';
-import { removeFromFollow, addToFollowers } from './../../../service';
+import {
+  addFollowers,
+  removeFromFollowers,
+} from './../../../feature/followers/followerSlice';
 function Profile() {
+  const dispatch = useDispatch();
   const { post } = useSelector(state => state);
   const { bookmark } = useSelector(state => state);
   const { auth } = useSelector(state => state);
@@ -63,7 +67,7 @@ function Profile() {
       setEditUser(prevPost => ({ ...prevPost, ...response.data.user }));
     };
     getUser();
-  }, [userId]);
+  }, [userId, followers.followers]);
   const getIndex = () => {
     if (location.pathname.includes('bookmark')) return 1;
     if (location.pathname.includes('tagged')) return 0;
@@ -89,7 +93,9 @@ function Profile() {
                   bg="red.600"
                   color="white"
                   onClick={() => {
-                    removeFromFollow(userId, auth.token, followerDispatch);
+                    dispatch(
+                      removeFromFollowers({ _id: userId, token: auth.token })
+                    );
                   }}
                 >
                   Unfollow
@@ -99,7 +105,7 @@ function Profile() {
                   bg="red.600"
                   color="white"
                   onClick={() => {
-                    addToFollowers(userId, auth.token, followerDispatch);
+                    dispatch(addFollowers({ _id: userId, token: auth.token }));
                   }}
                 >
                   Follow
