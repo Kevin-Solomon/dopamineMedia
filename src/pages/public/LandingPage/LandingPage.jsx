@@ -12,7 +12,10 @@ import {
   TabPanel,
   useMediaQuery,
 } from '@chakra-ui/react';
+import { useLocation } from 'react-router-dom';
 function LandingPage() {
+  const location = useLocation();
+  console.log(location);
   const [isMobile] = useMediaQuery('(min-width: 768px)');
   return (
     <Box d="flex" h="100vh">
@@ -44,10 +47,10 @@ function LandingPage() {
             </TabList>
             <TabPanels>
               <TabPanel>
-                <Login />
+                <Login prevpath={location?.state?.prevPath} />
               </TabPanel>
               <TabPanel>
-                <Signup />
+                <Signup prevpath={location?.state?.prevPath} />
               </TabPanel>
             </TabPanels>
           </Tabs>

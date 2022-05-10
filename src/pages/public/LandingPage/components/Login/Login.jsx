@@ -12,8 +12,9 @@ import { useAuth } from './../../../../../context';
 import { formSubmitHandler } from './../../../../../service';
 import { loginUser } from './../../../../../feature/auth/authSlice';
 import { useDispatch } from 'react-redux';
-function Login() {
+function Login({ prevpath }) {
   const toast = useToast();
+
   const navigate = useNavigate();
   const [user, setUser] = useState({ username: '', password: '' });
   const changeHandler = e => {
@@ -50,9 +51,7 @@ function Login() {
         colorScheme="blue"
         onClick={e => {
           e.preventDefault();
-          dispatch(loginUser(user));
-          formSubmitHandler('/api/auth/login', user, authDispatch, toast);
-          navigate('/');
+          dispatch(loginUser(user)).then(res => navigate(prevpath));
         }}
       >
         Login
