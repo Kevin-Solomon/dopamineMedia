@@ -27,17 +27,16 @@ import {
 } from '@chakra-ui/react';
 import Navbar from '../../../components/Navbar/Navbar';
 import { postUser } from '../../../service/postUser';
-import { useAuth, useBookmark, useFollowers, usePost } from '../../../context';
+import { useSelector } from 'react-redux';
 import { getIcons } from '../../../util/getIcons';
 import Post from '../../../components/Post/Post';
 import { removeFromFollow, addToFollowers } from './../../../service';
 function Profile() {
+  const { post } = useSelector(state => state);
+  const { bookmark } = useSelector(state => state);
+  const { auth } = useSelector(state => state);
+  const { followers } = useSelector(state => state);
   const location = useLocation();
-  const { followerState, followerDispatch } = useFollowers();
-  const { authState, authDispatch } = useAuth();
-  const { bookmarkState } = useBookmark();
-  const { postState } = usePost();
-
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isLessThan640] = useMediaQuery('(max-width:640px)');
   const [user, setUser] = useState({
@@ -70,8 +69,8 @@ function Profile() {
     if (location.pathname.includes('tagged')) return 0;
     return 0;
   };
-  const bookmarkPost = postState.posts.filter(val =>
-    bookmarkState.includes(val._id)
+  const bookmarkPost = post.post.filter(val =>
+    bookmark.bookmark.includes(val._id)
   );
   return (
     <Box>
@@ -82,15 +81,15 @@ function Profile() {
           <Box d="flex" gap="1rem" flexDirection="column">
             <Box d="flex" alignItems="center" gap="1rem">
               <Text fontSize="2xl">{user.username}</Text>
-              {authState.user._id === userId ? (
+              {auth.user._id === userId ? (
                 <Box onClick={onOpen}>{getIcons('EDIT', '27px')}</Box>
               ) : null}
-              {followerState.includes(user.username) ? (
+              {followers.followers.includes(user.username) ? (
                 <Button
                   bg="red.600"
                   color="white"
                   onClick={() => {
-                    removeFromFollow(userId, authState.token, followerDispatch);
+                    removeFromFollow(userId, auth.token, followerDispatch);
                   }}
                 >
                   Unfollow
@@ -100,7 +99,7 @@ function Profile() {
                   bg="red.600"
                   color="white"
                   onClick={() => {
-                    addToFollowers(userId, authState.token, followerDispatch);
+                    addToFollowers(userId, auth.token, followerDispatch);
                   }}
                 >
                   Follow

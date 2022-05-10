@@ -26,7 +26,7 @@ export const loginUser = createAsyncThunk(
 );
 export const signUpUser = createAsyncThunk(
   'auth/signup',
-  async ({ name, username, password }) => {
+  async ({ user: { name, username, password }, navigate, prevpath }) => {
     try {
       const response = await axios({
         method: 'POST',
@@ -57,7 +57,7 @@ const authSlice = createSlice({
       state.user = action.payload.user;
       state.token = action.payload.token;
     },
-    [loginUser.rejected]: (state, { payload }) => {
+    [loginUser.rejected]: state => {
       state.loading = false;
       state.error = true;
     },

@@ -12,7 +12,7 @@ import { useDispatch } from 'react-redux';
 import { formSubmitHandler } from './../../../../../service';
 import { useAuth } from '../../../../../context';
 import { useNavigate } from 'react-router-dom';
-function Signup() {
+function Signup({ prevpath }) {
   const toast = useToast();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -63,9 +63,9 @@ function Signup() {
         colorScheme="blue"
         onClick={e => {
           e.preventDefault();
-          dispatch(signUpUser(user));
-          // formSubmitHandler('/api/auth/signup', user, authDispatch, toast);
-          navigate('/');
+          dispatch(signUpUser({ user, navigate, prevpath })).then(res =>
+            navigate(prevpath || '/')
+          );
         }}
       >
         Sign Up
