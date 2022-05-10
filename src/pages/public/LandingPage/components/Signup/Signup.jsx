@@ -64,7 +64,7 @@ function Signup({ prevpath }) {
         onClick={e => {
           e.preventDefault();
           dispatch(signUpUser({ user, navigate, prevpath })).then(res =>
-            navigate(prevpath)
+            navigate(prevpath || '/')
           );
         }}
       >
