@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Avatar, Box, Input, Text, Textarea } from '@chakra-ui/react';
 import { getIcons } from '../../util/getIcons';
 import {
+  Spinner,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -29,6 +30,7 @@ function Navbar() {
     auth: { token, user },
   } = useSelector(state => state);
   const dispatch = useDispatch();
+  const { loading, error } = useSelector(state => state.post);
   return (
     <Box
       bg="#ffffff"
@@ -42,6 +44,18 @@ function Navbar() {
       border="1px solid #dbdbdb"
       padding="10px"
     >
+      {loading && (
+        <Box h="100vh" w="100vw" position="fixed" bg="#fff" opacity="0.5">
+          <Spinner
+            color="red.500"
+            size="xl"
+            position="absolute"
+            top="50%"
+            left="50%"
+            transform="translate(-50%,-50%)"
+          />
+        </Box>
+      )}
       <Box width="60%" margin="0 auto" d="flex" justifyContent="space-between">
         <Text>This is the Box</Text>
         <Box d="flex" gap="1rem">
@@ -52,7 +66,7 @@ function Navbar() {
           <Avatar
             cursor="pointer"
             onClick={() => {
-              navigate(`/${authState.user._id}`);
+              navigate(`/${user._id}`);
             }}
             size="sm"
             name={user?.name || user?.firstName}
@@ -133,8 +147,15 @@ function Navbar() {
           <ModalFooter>
             <Button
               colorScheme="blue"
-              onClick={() => {
+              onClick={async () => {
                 dispatch(addPostFunction({ post, token }));
+                toast({
+                  title: 'Get ready for the dopamine rush',
+                  description: `You just posted something`,
+                  status: 'success',
+                  duration: 5000,
+                  isClosable: true,
+                });
                 setPost({ content: '', img: '' });
                 onClose();
               }}
