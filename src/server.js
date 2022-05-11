@@ -12,7 +12,7 @@ import {
   deletePostCommentHandler,
   upvotePostCommentHandler,
   downvotePostCommentHandler,
-} from './backend/controllers/CommentsController';
+} from './backend/controllers/CommentController';
 import {
   createPostHandler,
   getAllpostsHandler,

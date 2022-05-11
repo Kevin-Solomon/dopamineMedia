@@ -25,18 +25,16 @@ function PostListing() {
         flexDirection="column"
         gap="1rem"
       >
-        {[...userPost, ...postList].map(
-          ({ username, likes, content, _id, img }) => (
-            <Post
-              key={_id}
-              username={username}
-              likes={likes}
-              content={content}
-              img={img}
-              _id={_id}
-            />
-          )
-        )}
+        {post.map(({ username, likes, content, _id, img }) => (
+          <Post
+            key={_id}
+            username={username}
+            likes={likes}
+            content={content}
+            img={img}
+            _id={_id}
+          />
+        ))}
       </Box>
       <FollowerList />
     </Box>

@@ -11,6 +11,7 @@ import {
   MdAddCircleOutline,
   MdOutlineExplore,
   MdExplore,
+  MdOutlineCancel,
 } from 'react-icons/md';
 import { BsThreeDots, BsBookmark, BsBookmarkFill } from 'react-icons/bs';
 const getIcons = (type, size) => {
@@ -92,6 +93,12 @@ const getIcons = (type, size) => {
       return (
         <span style={style}>
           <AiFillEdit />
+        </span>
+      );
+    case 'CANCEL':
+      return (
+        <span style={style}>
+          <MdOutlineCancel />
         </span>
       );
 

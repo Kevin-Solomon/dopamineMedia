@@ -63,7 +63,7 @@ function Post({ username, likes, content, img, _id }) {
       const user = response.data.users.filter(
         user => user.username === username
       );
-
+      console.log(user);
       setAuthor(user[0]);
     }
     getUsers();
@@ -80,7 +80,7 @@ function Post({ username, likes, content, img, _id }) {
       >
         <Box d="flex" justifyContent="space-between">
           <Box>
-            <Link to={`/${postAuthor._id}`}>
+            <Link to={`/${postAuthor?._id}`}>
               <Avatar
                 size="sm"
                 name={username}

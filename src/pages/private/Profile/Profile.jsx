@@ -24,6 +24,7 @@ import {
   useMediaQuery,
   useDisclosure,
   Button,
+  AvatarBadge,
 } from '@chakra-ui/react';
 import Navbar from '../../../components/Navbar/Navbar';
 import { postUser } from '../../../service/postUser';
@@ -53,6 +54,7 @@ function Profile() {
     lastName: 'User',
     bio: '',
     posts: 0,
+    portfolio: '',
   });
   const [editUser, setEditUser] = useState({
     ...user,
@@ -172,60 +174,91 @@ function Profile() {
           <ModalHeader>Edit User</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <FormControl>
-              <FormLabel htmlFor="username">Username</FormLabel>
-              <Input
-                name="username"
-                id="username"
-                placeholder="Username"
-                value={editUser.username}
-                onChange={e => {
-                  setEditUser(prev => ({
-                    ...prev,
-                    [e.target.name]: e.target.value,
-                  }));
-                }}
-              />
-              <FormLabel htmlFor="firstName">First Name</FormLabel>
-              <Input
-                name="firstName"
-                id="firstName"
-                placeholder="First Name"
-                value={editUser.firstName}
-                onChange={e => {
-                  setEditUser(prev => ({
-                    ...prev,
-                    [e.target.name]: e.target.value,
-                  }));
-                }}
-              />
-              <FormLabel htmlFor="lastName">Last Name</FormLabel>
-              <Input
-                name="lastName"
-                id="lastName"
-                placeholder="Last Name"
-                value={editUser.lastName}
-                onChange={e => {
-                  setEditUser(prev => ({
-                    ...prev,
-                    [e.target.name]: e.target.value,
-                  }));
-                }}
-              />
-              <FormLabel htmlFor="bio">Bio</FormLabel>
-              <Input
-                name="bio"
-                id="bio"
-                placeholder="Bio"
-                value={editUser.bio}
-                onChange={e => {
-                  setEditUser(prev => ({
-                    ...prev,
-                    [e.target.name]: e.target.value,
-                  }));
-                }}
-              />
-            </FormControl>
+            <Box d="flex" flexDirection="column" gap="3">
+              <Avatar size="xl">
+                <AvatarBadge
+                  position="absolute"
+                  top="-20px"
+                  right="-5px"
+                  boxSize="1.25em"
+                  bg="red.500"
+                >
+                  {getIcons('CANCEL', '27px')}
+                </AvatarBadge>
+              </Avatar>
+              <FormControl>
+                <FormLabel htmlFor="username">Username</FormLabel>
+                <Input
+                  my="1"
+                  name="username"
+                  id="username"
+                  placeholder="Username"
+                  value={editUser.username}
+                  onChange={e => {
+                    setEditUser(prev => ({
+                      ...prev,
+                      [e.target.name]: e.target.value,
+                    }));
+                  }}
+                />
+                <FormLabel htmlFor="firstName">First Name</FormLabel>
+                <Input
+                  my="1"
+                  name="firstName"
+                  id="firstName"
+                  placeholder="First Name"
+                  value={editUser.firstName}
+                  onChange={e => {
+                    setEditUser(prev => ({
+                      ...prev,
+                      [e.target.name]: e.target.value,
+                    }));
+                  }}
+                />
+                <FormLabel htmlFor="lastName">Last Name</FormLabel>
+                <Input
+                  my="1"
+                  name="lastName"
+                  id="lastName"
+                  placeholder="Last Name"
+                  value={editUser.lastName}
+                  onChange={e => {
+                    setEditUser(prev => ({
+                      ...prev,
+                      [e.target.name]: e.target.value,
+                    }));
+                  }}
+                />
+                <FormLabel htmlFor="bio">Bio</FormLabel>
+                <Input
+                  my="1"
+                  name="bio"
+                  id="bio"
+                  placeholder="Bio"
+                  value={editUser.bio}
+                  onChange={e => {
+                    setEditUser(prev => ({
+                      ...prev,
+                      [e.target.name]: e.target.value,
+                    }));
+                  }}
+                />
+                <FormLabel htmlFor="portfolio">Portfolio</FormLabel>
+                <Input
+                  my="1"
+                  name="portfolio"
+                  id="portfolio"
+                  placeholder="portfolio"
+                  value={editUser.portfolio}
+                  onChange={e => {
+                    setEditUser(prev => ({
+                      ...prev,
+                      [e.target.name]: e.target.value,
+                    }));
+                  }}
+                />
+              </FormControl>
+            </Box>
           </ModalBody>
 
           <ModalFooter>

@@ -40,7 +40,7 @@ function Navbar() {
       top="0px"
       right="0px"
       paddingTop="1rem"
-      zIndex="1"
+      zIndex="5"
       border="1px solid #dbdbdb"
       padding="10px"
     >
