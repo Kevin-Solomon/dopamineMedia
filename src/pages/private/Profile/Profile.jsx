@@ -64,11 +64,12 @@ function Profile() {
         method: 'GET',
         url: `/api/users/${userId}`,
       });
+      console.log(response);
       setUser(prevPost => ({ ...prevPost, ...response.data.user }));
       setEditUser(prevPost => ({ ...prevPost, ...response.data.user }));
     };
     getUser();
-  }, [userId, followers.followers]);
+  }, [userId, followers.followers, auth.token]);
   const getIndex = () => {
     if (location.pathname.includes('bookmark')) return 1;
     if (location.pathname.includes('tagged')) return 0;
@@ -82,10 +83,7 @@ function Profile() {
       <Navbar />
       <Box padding="0.8rem" maxW="800px" margin="4rem auto">
         <Box d="flex" gap={isLessThan640 ? '1rem' : '3rem'}>
-          <Avatar
-            size={isLessThan640 ? 'xl' : '2xl'}
-            name={auth.user.username}
-          />
+          <Avatar size={isLessThan640 ? 'xl' : '2xl'} name={user.username} />
           <Box d="flex" gap="1rem" flexDirection="column">
             <Box d="flex" alignItems="center" gap="1rem">
               <Text fontSize="2xl">{user.username}</Text>
@@ -123,18 +121,18 @@ function Profile() {
 
             <Box d="flex" gap="1rem">
               <Box as="span" d="flex" gap="3px">
-                <Text fontWeight="900">{auth.user.posts}</Text>posts
+                <Text fontWeight="900">{user.posts}</Text>posts
               </Box>
               <Box as="span" d="flex" gap="3px">
-                <Text fontWeight="900">{auth.user.followers.length}</Text>
+                <Text fontWeight="900">{user.followers.length}</Text>
                 followers
               </Box>
               <Box as="span" d="flex" gap="3px">
-                <Text fontWeight="700">{auth.user.following.length} </Text>
+                <Text fontWeight="700">{user.following.length} </Text>
                 following
               </Box>
             </Box>
-            <Text>{`${auth.user.firstName} ${auth.user.lastName}`}</Text>
+            <Text>{`${user.firstName} ${user.lastName}`}</Text>
             <Text>{auth.user.bio}</Text>
           </Box>
         </Box>
