@@ -16,6 +16,7 @@ import {
   PopoverHeader,
   PopoverBody,
   PopoverTrigger,
+  useToast,
 } from '@chakra-ui/react';
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
@@ -40,6 +41,7 @@ import {
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 function Post({ username, likes, content, img, _id }) {
+  const toast = useToast();
   const postState = useSelector(state => state.post);
   const bookmarkState = useSelector(state => state.bookmark);
   const { user, token } = useSelector(state => state.auth);
@@ -117,6 +119,12 @@ function Post({ username, likes, content, img, _id }) {
                     onClick={() => {
                       console.log('clciked');
                       dispatch(deletePost({ _id, token }));
+                      toast({
+                        title: 'Your post has been deleted',
+                        status: 'error',
+                        duration: 5000,
+                        isClosable: true,
+                      });
                     }}
                   >
                     Delete Post
@@ -169,7 +177,6 @@ function Post({ username, likes, content, img, _id }) {
               {likes.likedBy.some(users => users.username === user.username) ? (
                 <Box
                   onClick={() => {
-                    // removeFromLike(_id, token, postDispatch);
                     dispatch(deleteFromLike({ _id, token }));
                   }}
                 >
@@ -178,7 +185,6 @@ function Post({ username, likes, content, img, _id }) {
               ) : (
                 <Box
                   onClick={() => {
-                    // addToLike(_id, token, postDispatch);
                     dispatch(addToLike({ _id, token }));
                   }}
                 >
@@ -201,7 +207,6 @@ function Post({ username, likes, content, img, _id }) {
               <Box
                 onClick={() => {
                   dispatch(addBookmark({ _id, token }));
-                  // addToBookmark(_id, token, bookmarkDispatch);
                 }}
               >
                 {' '}
