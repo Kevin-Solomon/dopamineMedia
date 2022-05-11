@@ -21,6 +21,22 @@ export const addFollowers = createAsyncThunk(
     }
   }
 );
+export const removeFromFollowers = createAsyncThunk(
+  'followers/removeFollowers',
+  async ({ _id, token }) => {
+    try {
+      const response = await axios({
+        url: `/api/users/unfollow/${_id}`,
+        method: 'POST',
+        headers: { authorization: token },
+      });
+      console.log(response);
+      return response.data.user.following.map(follow => follow.username);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+);
 const followerSlice = createSlice({
   name: 'followers',
   initialState,
@@ -36,6 +52,17 @@ const followerSlice = createSlice({
     [addFollowers.rejected]: state => {
       state.loading = false;
       state.error = true;
+    },
+    [removeFromFollowers.rejected]: state => {
+      state.loading = false;
+      state.error = true;
+    },
+    [removeFromFollowers.pending]: state => {
+      state.loading = true;
+    },
+    [removeFromFollowers.fulfilled]: (state, { payload }) => {
+      state.loading = false;
+      state.followers = payload;
     },
   },
 });

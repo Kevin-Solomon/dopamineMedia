@@ -42,7 +42,22 @@ export const signUpUser = createAsyncThunk(
     }
   }
 );
-export const editUser = createAsyncThunk('auth/editUser', async () => {});
+export const editUserDetails = createAsyncThunk(
+  'auth/editUser',
+  async ({ userData, token }) => {
+    try {
+      const response = await axios({
+        method: 'POST',
+        url: '/api/users/edit',
+        headers: { authorization: token },
+        data: { userData },
+      });
+      return response.data.user;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+);
 const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -70,6 +85,17 @@ const authSlice = createSlice({
       state.token = action.payload.token;
     },
     [signUpUser.rejected]: state => {
+      state.loading = false;
+      state.error = true;
+    },
+    [editUserDetails.pending]: state => {
+      state.loading = true;
+    },
+    [editUserDetails.fulfilled]: (state, { payload }) => {
+      state.loading = false;
+      state.user = payload;
+    },
+    [editUserDetails.rejected]: state => {
       state.loading = false;
       state.error = true;
     },

@@ -63,9 +63,16 @@ function Signup({ prevpath }) {
         colorScheme="blue"
         onClick={e => {
           e.preventDefault();
-          dispatch(signUpUser({ user, navigate, prevpath })).then(res =>
-            navigate(prevpath || '/')
-          );
+          dispatch(signUpUser({ user, navigate, prevpath })).then(res => {
+            toast({
+              title: 'Sign In Successfully',
+              description: `Hey, ${res.payload.user.name}`,
+              status: 'success',
+              duration: 5000,
+              isClosable: true,
+            });
+            navigate(prevpath || '/');
+          });
         }}
       >
         Sign Up

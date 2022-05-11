@@ -16,6 +16,7 @@ import {
   PopoverHeader,
   PopoverBody,
   PopoverTrigger,
+  useToast,
 } from '@chakra-ui/react';
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
@@ -39,7 +40,9 @@ import {
 } from './../../service';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { removeFromFollowers } from './../../feature/followers/followerSlice';
 function Post({ username, likes, content, img, _id }) {
+  const toast = useToast();
   const postState = useSelector(state => state.post);
   const bookmarkState = useSelector(state => state.bookmark);
   const { user, token } = useSelector(state => state.auth);
@@ -100,10 +103,11 @@ function Post({ username, likes, content, img, _id }) {
                   <Text
                     cursor="pointer"
                     onClick={() => {
-                      removeFromFollow(
-                        postAuthor._id,
-                        user.token,
-                        followerDispatch
+                      dispatch(
+                        removeFromFollowers({
+                          _id: postAuthor._id,
+                          token,
+                        })
                       );
                     }}
                   >
@@ -117,6 +121,12 @@ function Post({ username, likes, content, img, _id }) {
                     onClick={() => {
                       console.log('clciked');
                       dispatch(deletePost({ _id, token }));
+                      toast({
+                        title: 'Your post has been deleted',
+                        status: 'error',
+                        duration: 5000,
+                        isClosable: true,
+                      });
                     }}
                   >
                     Delete Post
@@ -157,6 +167,12 @@ function Post({ username, likes, content, img, _id }) {
           <Button
             onClick={() => {
               dispatch(editPost({ _id, data: post, token }));
+              toast({
+                title: 'You updated your post',
+                status: 'info',
+                duration: 5000,
+                isClosable: true,
+              });
               setEditable(false);
             }}
           >
@@ -169,8 +185,13 @@ function Post({ username, likes, content, img, _id }) {
               {likes.likedBy.some(users => users.username === user.username) ? (
                 <Box
                   onClick={() => {
-                    // removeFromLike(_id, token, postDispatch);
                     dispatch(deleteFromLike({ _id, token }));
+                    toast({
+                      title: 'You no longer like this post',
+                      status: 'error',
+                      duration: 5000,
+                      isClosable: true,
+                    });
                   }}
                 >
                   {getIcons('LIKE_FILL', '27px')}
@@ -178,8 +199,13 @@ function Post({ username, likes, content, img, _id }) {
               ) : (
                 <Box
                   onClick={() => {
-                    // addToLike(_id, token, postDispatch);
                     dispatch(addToLike({ _id, token }));
+                    toast({
+                      title: 'You liked this post',
+                      status: 'success',
+                      duration: 5000,
+                      isClosable: true,
+                    });
                   }}
                 >
                   {getIcons('OUTLINE_HEART', '27px')}
@@ -193,6 +219,12 @@ function Post({ username, likes, content, img, _id }) {
               <Box
                 onClick={() => {
                   dispatch(deleteBookmark({ _id, token }));
+                  toast({
+                    title: 'This post has been removed from bookmarks',
+                    status: 'error',
+                    duration: 5000,
+                    isClosable: true,
+                  });
                 }}
               >
                 {getIcons('BOOKMARK_FILL', '27px')}
@@ -201,7 +233,12 @@ function Post({ username, likes, content, img, _id }) {
               <Box
                 onClick={() => {
                   dispatch(addBookmark({ _id, token }));
-                  // addToBookmark(_id, token, bookmarkDispatch);
+                  toast({
+                    title: 'Moved post to bookmark',
+                    status: 'success',
+                    duration: 5000,
+                    isClosable: true,
+                  });
                 }}
               >
                 {' '}

@@ -27,11 +27,16 @@ import {
 } from '@chakra-ui/react';
 import Navbar from '../../../components/Navbar/Navbar';
 import { postUser } from '../../../service/postUser';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { getIcons } from '../../../util/getIcons';
 import Post from '../../../components/Post/Post';
-import { removeFromFollow, addToFollowers } from './../../../service';
+import {
+  addFollowers,
+  removeFromFollowers,
+} from './../../../feature/followers/followerSlice';
+import { editUserDetails } from './../../../feature/auth/authSlice';
 function Profile() {
+  const dispatch = useDispatch();
   const { post } = useSelector(state => state);
   const { bookmark } = useSelector(state => state);
   const { auth } = useSelector(state => state);
@@ -59,11 +64,12 @@ function Profile() {
         method: 'GET',
         url: `/api/users/${userId}`,
       });
+      console.log(response);
       setUser(prevPost => ({ ...prevPost, ...response.data.user }));
       setEditUser(prevPost => ({ ...prevPost, ...response.data.user }));
     };
     getUser();
-  }, [userId]);
+  }, [userId, followers.followers, auth.token]);
   const getIndex = () => {
     if (location.pathname.includes('bookmark')) return 1;
     if (location.pathname.includes('tagged')) return 0;
@@ -84,27 +90,33 @@ function Profile() {
               {auth.user._id === userId ? (
                 <Box onClick={onOpen}>{getIcons('EDIT', '27px')}</Box>
               ) : null}
-              {followers.followers.includes(user.username) ? (
-                <Button
-                  bg="red.600"
-                  color="white"
-                  onClick={() => {
-                    removeFromFollow(userId, auth.token, followerDispatch);
-                  }}
-                >
-                  Unfollow
-                </Button>
-              ) : (
-                <Button
-                  bg="red.600"
-                  color="white"
-                  onClick={() => {
-                    addToFollowers(userId, auth.token, followerDispatch);
-                  }}
-                >
-                  Follow
-                </Button>
-              )}
+              {auth.user._id !== userId ? (
+                followers.followers.includes(user.username) ? (
+                  <Button
+                    bg="red.600"
+                    color="white"
+                    onClick={() => {
+                      dispatch(
+                        removeFromFollowers({ _id: userId, token: auth.token })
+                      );
+                    }}
+                  >
+                    Unfollow
+                  </Button>
+                ) : (
+                  <Button
+                    bg="red.600"
+                    color="white"
+                    onClick={() => {
+                      dispatch(
+                        addFollowers({ _id: userId, token: auth.token })
+                      );
+                    }}
+                  >
+                    Follow
+                  </Button>
+                )
+              ) : null}
             </Box>
 
             <Box d="flex" gap="1rem">
@@ -112,14 +124,16 @@ function Profile() {
                 <Text fontWeight="900">{user.posts}</Text>posts
               </Box>
               <Box as="span" d="flex" gap="3px">
-                <Text fontWeight="900">{user.followers.length}</Text>followers
+                <Text fontWeight="900">{user.followers.length}</Text>
+                followers
               </Box>
               <Box as="span" d="flex" gap="3px">
-                <Text fontWeight="700">{user.following.length} </Text>following
+                <Text fontWeight="700">{user.following.length} </Text>
+                following
               </Box>
             </Box>
             <Text>{`${user.firstName} ${user.lastName}`}</Text>
-            <Text>{user.bio}</Text>
+            <Text>{auth.user.bio}</Text>
           </Box>
         </Box>
         <Divider marginTop="10px" color="black" />
@@ -218,14 +232,9 @@ function Profile() {
             <Button
               onClick={e => {
                 e.preventDefault();
-                postUser(
-                  authState.token,
-                  editUser,
-                  setUser,
-                  setEditUser,
-                  authDispatch
+                dispatch(
+                  editUserDetails({ userData: editUser, token: auth.token })
                 );
-
                 onClose();
               }}
               colorScheme="blue"

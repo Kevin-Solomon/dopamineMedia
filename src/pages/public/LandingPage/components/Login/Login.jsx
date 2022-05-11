@@ -9,7 +9,6 @@ import {
 } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from './../../../../../context';
-import { formSubmitHandler } from './../../../../../service';
 import { loginUser } from './../../../../../feature/auth/authSlice';
 import { useDispatch } from 'react-redux';
 function Login({ prevpath }) {
@@ -49,9 +48,28 @@ function Login({ prevpath }) {
         marginTop="10px"
         w="100%"
         colorScheme="blue"
-        onClick={e => {
-          e.preventDefault();
-          dispatch(loginUser(user)).then(res => navigate(prevpath || '/'));
+        onClick={async e => {
+          try {
+            e.preventDefault();
+            const response = await dispatch(loginUser(user));
+            toast({
+              title: 'Logged In Successfully',
+              description: `Welcome back, ${response.payload.user.firstName}`,
+              status: 'success',
+              duration: 5000,
+              isClosable: true,
+            });
+            navigate(prevpath || '/');
+          } catch (err) {
+            toast({
+              title: 'Something went wrong',
+              description: `Do you want to report this issue`,
+              status: 'error',
+              duration: 5000,
+              isClosable: true,
+            });
+            console.log(err);
+          }
         }}
       >
         Login
