@@ -40,6 +40,7 @@ import {
 } from './../../service';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { removeFromFollowers } from './../../feature/followers/followerSlice';
 function Post({ username, likes, content, img, _id }) {
   const toast = useToast();
   const postState = useSelector(state => state.post);
@@ -102,10 +103,11 @@ function Post({ username, likes, content, img, _id }) {
                   <Text
                     cursor="pointer"
                     onClick={() => {
-                      removeFromFollow(
-                        postAuthor._id,
-                        user.token,
-                        followerDispatch
+                      dispatch(
+                        removeFromFollowers({
+                          _id: postAuthor._id,
+                          token,
+                        })
                       );
                     }}
                   >
