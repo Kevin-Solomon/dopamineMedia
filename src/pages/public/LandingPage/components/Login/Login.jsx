@@ -48,19 +48,28 @@ function Login({ prevpath }) {
         marginTop="10px"
         w="100%"
         colorScheme="blue"
-        onClick={e => {
-          e.preventDefault();
-          dispatch(loginUser(user)).then(res => {
-            console.log(res);
+        onClick={async e => {
+          try {
+            e.preventDefault();
+            const response = await dispatch(loginUser(user));
             toast({
               title: 'Logged In Successfully',
-              description: `Welcome back, ${res.payload.user.firstName}`,
+              description: `Welcome back, ${response.payload.user.firstName}`,
               status: 'success',
               duration: 5000,
               isClosable: true,
             });
             navigate(prevpath || '/');
-          });
+          } catch (err) {
+            toast({
+              title: 'Something went wrong',
+              description: `Do you want to report this issue`,
+              status: 'error',
+              duration: 5000,
+              isClosable: true,
+            });
+            console.log(err);
+          }
         }}
       >
         Login
