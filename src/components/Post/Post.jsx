@@ -165,6 +165,12 @@ function Post({ username, likes, content, img, _id }) {
           <Button
             onClick={() => {
               dispatch(editPost({ _id, data: post, token }));
+              toast({
+                title: 'You updated your post',
+                status: 'info',
+                duration: 5000,
+                isClosable: true,
+              });
               setEditable(false);
             }}
           >
