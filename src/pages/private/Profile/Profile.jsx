@@ -36,6 +36,7 @@ import {
   removeFromFollowers,
 } from './../../../feature/followers/followerSlice';
 import { editUserDetails } from './../../../feature/auth/authSlice';
+import { Link } from '@chakra-ui/react';
 function Profile() {
   const dispatch = useDispatch();
   const { post } = useSelector(state => state);
@@ -55,6 +56,7 @@ function Profile() {
     bio: '',
     posts: 0,
     portfolio: '',
+    img: '',
   });
   const [editUser, setEditUser] = useState({
     ...user,
@@ -85,7 +87,11 @@ function Profile() {
       <Navbar />
       <Box padding="0.8rem" maxW="800px" margin="4rem auto">
         <Box d="flex" gap={isLessThan640 ? '1rem' : '3rem'}>
-          <Avatar size={isLessThan640 ? 'xl' : '2xl'} name={user.username} />
+          <Avatar
+            src={user.img}
+            size={isLessThan640 ? 'xl' : '2xl'}
+            name={user.username}
+          />
           <Box d="flex" gap="1rem" flexDirection="column">
             <Box d="flex" alignItems="center" gap="1rem">
               <Text fontSize="2xl">{user.username}</Text>
@@ -136,7 +142,7 @@ function Profile() {
             </Box>
             <Text>{`${user.firstName} ${user.lastName}`}</Text>
             <Text>{auth.user.bio}</Text>
-            <Text>{auth.user.portfolio}</Text>
+            <Link color="blue">{auth.user.portfolio}</Link>
           </Box>
         </Box>
         <Divider marginTop="10px" color="black" />
@@ -176,7 +182,7 @@ function Profile() {
           <ModalCloseButton />
           <ModalBody>
             <Box d="flex" flexDirection="column" gap="3">
-              <Avatar size="xl">
+              <Avatar size="xl" src={editUser.img}>
                 <AvatarBadge
                   position="absolute"
                   top="-20px"
@@ -186,6 +192,33 @@ function Profile() {
                 >
                   {getIcons('CANCEL', '27px')}
                 </AvatarBadge>
+                <FormLabel
+                  top="40%"
+                  left="15%"
+                  position="absolute"
+                  htmlFor="profile-img"
+                >
+                  Change
+                </FormLabel>
+                <Input
+                  onChange={e => {
+                    e.preventDefault();
+                    console.log(e);
+                    const reader = new FileReader();
+                    reader.readAsDataURL(e.target.files[0]);
+                    reader.onload = e => {
+                      e.preventDefault();
+                      console.log(reader.result);
+                      setEditUser(prevPost => ({
+                        ...prevPost,
+                        img: reader.result,
+                      }));
+                    };
+                  }}
+                  display="none"
+                  id="profile-img"
+                  type="file"
+                />
               </Avatar>
               <FormControl>
                 <FormLabel htmlFor="username">Username</FormLabel>
