@@ -142,7 +142,9 @@ function Profile() {
             </Box>
             <Text>{`${user.firstName} ${user.lastName}`}</Text>
             <Text>{auth.user.bio}</Text>
-            <Link color="blue">{auth.user.portfolio}</Link>
+            <Link href={user.portfolio} color="blue.500" isExternal>
+              {auth.user.portfolio}
+            </Link>
           </Box>
         </Box>
         <Divider marginTop="10px" color="black" />
