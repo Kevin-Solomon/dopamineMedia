@@ -136,6 +136,7 @@ function Profile() {
             </Box>
             <Text>{`${user.firstName} ${user.lastName}`}</Text>
             <Text>{auth.user.bio}</Text>
+            <Text>{auth.user.portfolio}</Text>
           </Box>
         </Box>
         <Divider marginTop="10px" color="black" />
