@@ -28,35 +28,24 @@ import {
   deleteBookmark,
 } from './../../feature/bookmark/bookmarkSlice';
 import LikedBy from '../LikedBy/LikedBy';
-// import { addToLike } from '../../service/addToLike';
-import { useAuth, useBookmark, useFollowers, usePost } from '../../context';
 import { getIcons } from '../../util/getIcons';
-import { updatePost } from './../../service';
-import {
-  removeFromFollow,
-  removeFromLike,
-  addToBookmark,
-  removeFromBookmark,
-} from './../../service';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { removeFromFollowers } from './../../feature/followers/followerSlice';
-function Post({ username, likes, content, img, _id }) {
+function Post({ username, likes, content, img, _id, comments }) {
+  console.log(comments);
   const toast = useToast();
   const postState = useSelector(state => state.post);
   const bookmarkState = useSelector(state => state.bookmark);
   const { user, token } = useSelector(state => state.auth);
-  console.log(token);
   const dispatch = useDispatch();
-  console.log(bookmarkState);
-  // const { followerState, followerDispatch } = useFollowers();
-  // const { bookmarkState, bookmarkDispatch } = useBookmark();
   const [editable, setEditable] = useState(false);
-  const [post, setPost] = useState({ content: content, img: img });
+  const [post, setPost] = useState({
+    content: content,
+    img: img,
+    comments: comments,
+  });
   const [postAuthor, setAuthor] = useState({ _id: '' });
-  // const { authState } = useAuth();
-  // const { postDispatch } = usePost();
-
   useEffect(() => {
     async function getUsers() {
       const response = await axios({ method: 'GET', url: '/api/users' });
@@ -66,7 +55,15 @@ function Post({ username, likes, content, img, _id }) {
       console.log(user);
       setAuthor(user[0]);
     }
+    async function getComments() {
+      const response = await axios({
+        method: 'GET',
+        url: `/api/comments/${_id}`,
+      });
+      console.log(response);
+    }
     getUsers();
+    getComments();
   }, [user.token]);
   return (
     <Box w="100%" margin="10px auto" backgroundColor="#ffffff">
@@ -254,11 +251,45 @@ function Post({ username, likes, content, img, _id }) {
             <LikedBy users={likes.likedBy} />
           )}
         </Text>
-        <Text></Text>
+        <Text>
+          {comments.map(({ comment, username }) => {
+            return (
+              <Box d="flex" gap="1">
+                <Text fontWeight="700">{username}</Text>
+                <Text>{comment}</Text>
+              </Box>
+            );
+          })}
+        </Text>
         <InputGroup size="md">
-          <Input pr="4.5rem" placeholder="Add a comment..." />
+          <Input
+            pr="4.5rem"
+            placeholder="Add a comment..."
+            value={post.comments}
+            onChange={e =>
+              setPost(prev => ({ ...prev, comments: e.target.value }))
+            }
+          />
           <InputRightElement width="4.5rem">
-            <Button h="1.75rem" size="sm">
+            <Button
+              h="1.75rem"
+              size="sm"
+              onClick={async () => {
+                try {
+                  const response = await axios({
+                    method: 'POST',
+                    url: `/api/comments/add/${_id}`,
+                    headers: { authorization: token },
+                    data: { commentData: { comment: post.comments } },
+                  });
+                  dispatch(editPost({ _id, postData: post, token }));
+                  console.log(response);
+                  setPost(prev => ({ ...prev, comments: '' }));
+                } catch (err) {
+                  console.log(err.response);
+                }
+              }}
+            >
               Post
             </Button>
           </InputRightElement>

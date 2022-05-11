@@ -25,7 +25,7 @@ function PostListing() {
         flexDirection="column"
         gap="1rem"
       >
-        {post.map(({ username, likes, content, _id, img }) => (
+        {post.map(({ username, likes, content, _id, img, comments }) => (
           <Post
             key={_id}
             username={username}
@@ -33,6 +33,7 @@ function PostListing() {
             content={content}
             img={img}
             _id={_id}
+            comments={comments}
           />
         ))}
       </Box>
