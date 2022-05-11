@@ -184,6 +184,12 @@ function Post({ username, likes, content, img, _id }) {
                 <Box
                   onClick={() => {
                     dispatch(deleteFromLike({ _id, token }));
+                    toast({
+                      title: 'You no longer like this post',
+                      status: 'error',
+                      duration: 5000,
+                      isClosable: true,
+                    });
                   }}
                 >
                   {getIcons('LIKE_FILL', '27px')}
@@ -192,6 +198,12 @@ function Post({ username, likes, content, img, _id }) {
                 <Box
                   onClick={() => {
                     dispatch(addToLike({ _id, token }));
+                    toast({
+                      title: 'You liked this post',
+                      status: 'success',
+                      duration: 5000,
+                      isClosable: true,
+                    });
                   }}
                 >
                   {getIcons('OUTLINE_HEART', '27px')}
@@ -205,6 +217,12 @@ function Post({ username, likes, content, img, _id }) {
               <Box
                 onClick={() => {
                   dispatch(deleteBookmark({ _id, token }));
+                  toast({
+                    title: 'This post has been removed from bookmarks',
+                    status: 'error',
+                    duration: 5000,
+                    isClosable: true,
+                  });
                 }}
               >
                 {getIcons('BOOKMARK_FILL', '27px')}
@@ -213,6 +231,12 @@ function Post({ username, likes, content, img, _id }) {
               <Box
                 onClick={() => {
                   dispatch(addBookmark({ _id, token }));
+                  toast({
+                    title: 'Moved post to bookmark',
+                    status: 'success',
+                    duration: 5000,
+                    isClosable: true,
+                  });
                 }}
               >
                 {' '}
