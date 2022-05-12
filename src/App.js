@@ -5,6 +5,7 @@ import Home from './pages/private/Home/Home';
 import Profile from './pages/private/Profile/Profile';
 import RequireAuth from './components/RequireAuth/RequireAuth';
 import NotFound from './pages/public/NotFound/NotFound';
+import SinglePost from './pages/private/SinglePost/SinglePost';
 function App() {
   return (
     <Routes>
@@ -34,6 +35,7 @@ function App() {
         }
       />
       <Route path="*" element={<NotFound />} />
+      <Route path="/post/:postId" element={<SinglePost />} />
     </Routes>
   );
 }
