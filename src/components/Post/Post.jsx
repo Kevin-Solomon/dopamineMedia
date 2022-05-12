@@ -17,10 +17,17 @@ import {
   PopoverBody,
   PopoverTrigger,
   useToast,
+  IconButton,
 } from '@chakra-ui/react';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { deletePost } from '../../feature/post/postSlice';
+import {
+  addComment,
+  deleteComment,
+  deletePost,
+  upvoteComment,
+  downvoteComment,
+} from '../../feature/post/postSlice';
 import { editPost } from '../../feature/post/postSlice';
 import { addToLike, deleteFromLike } from '../../feature/post/postSlice';
 import {
@@ -33,18 +40,21 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { removeFromFollowers } from './../../feature/followers/followerSlice';
 function Post({ username, likes, content, img, _id, comments }) {
-  console.log(comments);
+  const postId = _id;
   const toast = useToast();
   const postState = useSelector(state => state.post);
   const bookmarkState = useSelector(state => state.bookmark);
   const { user, token } = useSelector(state => state.auth);
   const dispatch = useDispatch();
   const [editable, setEditable] = useState(false);
+  const [editComment, setEditComment] = useState(true);
   const [post, setPost] = useState({
     content: content,
     img: img,
     comments: comments,
   });
+  console.log(post);
+  const commentRef = useRef(null);
   const [postAuthor, setAuthor] = useState({ _id: '' });
   useEffect(() => {
     async function getUsers() {
@@ -52,7 +62,6 @@ function Post({ username, likes, content, img, _id, comments }) {
       const user = response.data.users.filter(
         user => user.username === username
       );
-      console.log(user);
       setAuthor(user[0]);
     }
     async function getComments() {
@@ -252,11 +261,47 @@ function Post({ username, likes, content, img, _id, comments }) {
           )}
         </Text>
         <Text>
-          {comments.map(({ comment, username }) => {
+          {comments.map(({ comment, username, _id }) => {
             return (
               <Box d="flex" gap="1">
                 <Text fontWeight="700">{username}</Text>
-                <Text>{comment}</Text>
+                <Input
+                  isReadOnly={true}
+                  border="none"
+                  h="24px"
+                  value={comment}
+                  onChange={e =>
+                    setPost(prev => ({ ...prev, comment: e.target.value }))
+                  }
+                />
+                <IconButton
+                  bg="none"
+                  h="min-content"
+                  icon={getIcons('DELETE_POST', '16px')}
+                  onClick={() => {
+                    dispatch(deleteComment({ postId, commentId: _id, token }));
+                  }}
+                />
+                <IconButton
+                  bg="none"
+                  h="min-content"
+                  aria-label="Search database"
+                  icon={getIcons('UPVOTE', '16px')}
+                  onClick={() => {
+                    dispatch(upvoteComment({ postId, commentId: _id, token }));
+                  }}
+                />
+                <IconButton
+                  bg="none"
+                  h="min-content"
+                  aria-label="Search database"
+                  icon={getIcons('DOWNVOTE', '16px')}
+                  onClick={() => {
+                    dispatch(
+                      downvoteComment({ postId, commentId: _id, token })
+                    );
+                  }}
+                />
               </Box>
             );
           })}
@@ -274,20 +319,15 @@ function Post({ username, likes, content, img, _id, comments }) {
             <Button
               h="1.75rem"
               size="sm"
-              onClick={async () => {
-                try {
-                  const response = await axios({
-                    method: 'POST',
-                    url: `/api/comments/add/${_id}`,
-                    headers: { authorization: token },
-                    data: { commentData: { comment: post.comments } },
-                  });
-                  dispatch(editPost({ _id, postData: post, token }));
-                  console.log(response);
-                  setPost(prev => ({ ...prev, comments: '' }));
-                } catch (err) {
-                  console.log(err.response);
-                }
+              onClick={() => {
+                dispatch(
+                  addComment({
+                    _id,
+                    comment: { comment: post.comments },
+                    token,
+                  })
+                );
+                setPost(prev => ({ ...prev, comments: '' }));
               }}
             >
               Post

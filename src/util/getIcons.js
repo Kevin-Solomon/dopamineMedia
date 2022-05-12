@@ -5,6 +5,7 @@ import {
   AiFillHome,
   AiOutlineComment,
   AiFillEdit,
+  AiFillDelete,
 } from 'react-icons/ai';
 import {
   MdAddCircle,
@@ -14,6 +15,7 @@ import {
   MdOutlineCancel,
 } from 'react-icons/md';
 import { BsThreeDots, BsBookmark, BsBookmarkFill } from 'react-icons/bs';
+import { FaArrowAltCircleUp, FaArrowAltCircleDown } from 'react-icons/fa';
 const getIcons = (type, size) => {
   const style = { fontSize: size, cursor: 'pointer' };
   switch (type) {
@@ -99,6 +101,24 @@ const getIcons = (type, size) => {
       return (
         <span style={style}>
           <MdOutlineCancel />
+        </span>
+      );
+    case 'UPVOTE':
+      return (
+        <span style={style}>
+          <FaArrowAltCircleUp />
+        </span>
+      );
+    case 'DOWNVOTE':
+      return (
+        <span style={style}>
+          <FaArrowAltCircleDown />
+        </span>
+      );
+    case 'DELETE_POST':
+      return (
+        <span style={style}>
+          <AiFillDelete />
         </span>
       );
 
