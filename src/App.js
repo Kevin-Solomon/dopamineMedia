@@ -4,6 +4,7 @@ import LandingPage from './pages/public/LandingPage/LandingPage';
 import Home from './pages/private/Home/Home';
 import Profile from './pages/private/Profile/Profile';
 import RequireAuth from './components/RequireAuth/RequireAuth';
+import NotFound from './pages/public/NotFound/NotFound';
 function App() {
   return (
     <Routes>
@@ -32,6 +33,7 @@ function App() {
           </RequireAuth>
         }
       />
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }
