@@ -14,6 +14,28 @@ import { v4 as uuid } from 'uuid';
 export const getAllpostsHandler = function () {
   return new Response(200, {}, { posts: this.db.posts });
 };
+export const getQueryPost = function (schema, request) {
+  const { pageNumber } = request.params;
+  const index = (pageNumber - 1) * 5;
+  if (pageNumber <= 0) {
+    return new Response(
+      401,
+      {},
+      {
+        errors: ['Invalid Page number start from 1'],
+      }
+    );
+  } else {
+    return new Response(
+      200,
+      {},
+      {
+        posts: this.db.posts.slice(index, index + 5),
+        totalPost: this.db.posts.length,
+      }
+    );
+  }
+};
 
 /**
  * This handler gets post by postId in the db.

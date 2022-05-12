@@ -4,6 +4,7 @@ const initialState = {
   post: [],
   loading: false,
   error: false,
+  totalPost: 0,
 };
 export const getAllPost = createAsyncThunk('post/getAllPost', async () => {
   const response = await axios({ method: 'GET', url: '/api/posts' });
@@ -154,22 +155,32 @@ export const deleteFromLike = createAsyncThunk(
     }
   }
 );
+export const getQueryPost = createAsyncThunk(
+  'post/getQueryPost',
+  async ({ pageNumber }) => {
+    const response = await axios({
+      method: 'GET',
+      url: `api/post/${pageNumber}`,
+    });
+    return { posts: response.data.posts, totalPost: response.data.totalPost };
+  }
+);
 export const postSlice = createSlice({
   name: 'post',
   initialState,
   reducers: {},
   extraReducers: {
-    [getAllPost.pending]: state => {
-      state.loading = true;
-    },
-    [getAllPost.fulfilled]: (state, { payload }) => {
-      state.post = [...payload];
-      state.loading = false;
-    },
-    [getAllPost.rejected]: state => {
-      state.loading = false;
-      state.error = true;
-    },
+    // [getAllPost.pending]: state => {
+    //   state.loading = true;
+    // },
+    // [getAllPost.fulfilled]: (state, { payload }) => {
+    //   state.post = [...payload];
+    //   state.loading = false;
+    // },
+    // [getAllPost.rejected]: state => {
+    //   state.loading = false;
+    //   state.error = true;
+    // },
     [addPostFunction.pending]: state => {
       state.loading = true;
     },
@@ -269,6 +280,19 @@ export const postSlice = createSlice({
     },
     [downvoteComment.pending]: state => {
       state.pending = true;
+    },
+    [getQueryPost.pending]: state => {
+      state.loading = true;
+    },
+    [getQueryPost.fulfilled]: (state, { payload }) => {
+      console.log(payload);
+      state.loading = false;
+      state.post = [...state.post, ...payload.posts];
+      state.totalPost = payload.totalPost;
+    },
+    [getQueryPost.rejected]: state => {
+      state.loading = false;
+      state.error = true;
     },
   },
 });
