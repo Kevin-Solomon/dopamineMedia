@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import {
   Input,
   FormControl,
@@ -38,6 +38,7 @@ import {
 import { editUserDetails } from './../../../feature/auth/authSlice';
 import { Link } from '@chakra-ui/react';
 function Profile() {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { post } = useSelector(state => state);
   const { bookmark } = useSelector(state => state);
@@ -65,13 +66,17 @@ function Profile() {
   const { userId } = useParams();
   useEffect(() => {
     const getUser = async () => {
-      const response = await axios({
-        method: 'GET',
-        url: `/api/users/${userId}`,
-      });
-      console.log(response);
-      setUser(prevPost => ({ ...prevPost, ...response.data.user }));
-      setEditUser(prevPost => ({ ...prevPost, ...response.data.user }));
+      try {
+        const response = await axios({
+          method: 'GET',
+          url: `/api/users/${userId}`,
+        });
+        console.log(response);
+        setUser(prevPost => ({ ...prevPost, ...response.data.user }));
+        setEditUser(prevPost => ({ ...prevPost, ...response.data.user }));
+      } catch (err) {
+        navigate('*');
+      }
     };
     getUser();
   }, [userId, followers.followers, auth.token, auth.user]);
