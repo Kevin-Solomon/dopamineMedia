@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { usePost, useAuth, useFollowers } from '../../../../../context';
 import { useSelector, useDispatch } from 'react-redux';
 import Post from './../../../../../components/Post/Post';
+
 import { Box } from '@chakra-ui/react';
-import {
-  getAllPost,
-  getQueryPost,
-} from '../../../../../feature/post/postSlice';
+import { getQueryPost } from '../../../../../feature/post/postSlice';
 import FollowerList from '../FollowerList/FollowerList';
 import axios from 'axios';
 function PostListing() {
