@@ -261,9 +261,9 @@ function Post({ username, likes, content, img, _id, comments }) {
           )}
         </Text>
         <Text>
-          {comments.map(({ comment, username, _id }) => {
+          {comments.map(({ comment, username, _id, votes }) => {
             return (
-              <Box d="flex" gap="1">
+              <Box d="flex" gap="1" alignItems="center">
                 <Text fontWeight="700">{username}</Text>
                 <Input
                   isReadOnly={true}
@@ -282,26 +282,33 @@ function Post({ username, likes, content, img, _id, comments }) {
                     dispatch(deleteComment({ postId, commentId: _id, token }));
                   }}
                 />
-                <IconButton
-                  bg="none"
-                  h="min-content"
-                  aria-label="Search database"
-                  icon={getIcons('UPVOTE', '16px')}
-                  onClick={() => {
-                    dispatch(upvoteComment({ postId, commentId: _id, token }));
-                  }}
-                />
-                <IconButton
-                  bg="none"
-                  h="min-content"
-                  aria-label="Search database"
-                  icon={getIcons('DOWNVOTE', '16px')}
-                  onClick={() => {
-                    dispatch(
-                      downvoteComment({ postId, commentId: _id, token })
-                    );
-                  }}
-                />
+                <Box>
+                  <IconButton
+                    bg="none"
+                    h="min-content"
+                    aria-label="Search database"
+                    icon={getIcons('UPVOTE', '16px')}
+                    onClick={() => {
+                      dispatch(
+                        upvoteComment({ postId, commentId: _id, token })
+                      );
+                    }}
+                  />
+                  <Text textAlign="center">
+                    {votes.upvotedBy.length - votes.downvotedBy.length}
+                  </Text>
+                  <IconButton
+                    bg="none"
+                    h="min-content"
+                    aria-label="Search database"
+                    icon={getIcons('DOWNVOTE', '16px')}
+                    onClick={() => {
+                      dispatch(
+                        downvoteComment({ postId, commentId: _id, token })
+                      );
+                    }}
+                  />
+                </Box>
               </Box>
             );
           })}
