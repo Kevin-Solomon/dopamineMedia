@@ -61,6 +61,7 @@ function Profile() {
   const [editUser, setEditUser] = useState({
     ...user,
   });
+  console.log(editUser);
   const { userId } = useParams();
   useEffect(() => {
     const getUser = async () => {
@@ -73,7 +74,7 @@ function Profile() {
       setEditUser(prevPost => ({ ...prevPost, ...response.data.user }));
     };
     getUser();
-  }, [userId, followers.followers, auth.token]);
+  }, [userId, followers.followers, auth.token, auth.user]);
   const getIndex = () => {
     if (location.pathname.includes('bookmark')) return 1;
     if (location.pathname.includes('tagged')) return 0;
