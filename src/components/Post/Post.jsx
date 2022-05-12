@@ -275,7 +275,11 @@ function Post({ username, likes, content, img, _id, comments }) {
                   }
                 />
                 <IconButton
+                  py="1"
+                  px="1"
                   bg="none"
+                  _hover={{ bg: 'none' }}
+                  _focus={{ border: 'none' }}
                   h="min-content"
                   icon={getIcons('DELETE_POST', '16px')}
                   onClick={() => {
@@ -284,6 +288,8 @@ function Post({ username, likes, content, img, _id, comments }) {
                 />
                 <Box>
                   <IconButton
+                    _hover={{ bg: 'none' }}
+                    _focus={{ border: 'none' }}
                     bg="none"
                     h="min-content"
                     aria-label="Search database"
@@ -298,6 +304,8 @@ function Post({ username, likes, content, img, _id, comments }) {
                     {votes.upvotedBy.length - votes.downvotedBy.length}
                   </Text>
                   <IconButton
+                    _hover={{ bg: 'none' }}
+                    _focus={{ border: 'none' }}
                     bg="none"
                     h="min-content"
                     aria-label="Search database"
@@ -327,14 +335,23 @@ function Post({ username, likes, content, img, _id, comments }) {
               h="1.75rem"
               size="sm"
               onClick={() => {
-                dispatch(
-                  addComment({
-                    _id,
-                    comment: { comment: post.comments },
-                    token,
-                  })
-                );
-                setPost(prev => ({ ...prev, comments: '' }));
+                if (post.comments.length === 0) {
+                  toast({
+                    title: 'Please write a commemnt',
+                    status: 'error',
+                    duration: 5000,
+                    isClosable: true,
+                  });
+                } else {
+                  dispatch(
+                    addComment({
+                      _id,
+                      comment: { comment: post.comments },
+                      token,
+                    })
+                  );
+                  setPost(prev => ({ ...prev, comments: '' }));
+                }
               }}
             >
               Post
