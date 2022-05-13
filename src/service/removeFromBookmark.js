@@ -6,7 +6,6 @@ const removeFromBookmark = async (_id, token, bookmarkDispatch) => {
     url: `/api/users/remove-bookmark/${_id}`,
     headers: { authorization: token },
   });
-  console.log(response);
   bookmarkDispatch({
     type: 'REMOVE_FROM_BOOKMARK',
     payload: response.data.bookmarks,

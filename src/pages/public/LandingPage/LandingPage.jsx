@@ -15,7 +15,6 @@ import {
 import { useLocation } from 'react-router-dom';
 function LandingPage() {
   const location = useLocation();
-  console.log(location);
   const [isMobile] = useMediaQuery('(min-width: 768px)');
   return (
     <Box d="flex" h="100vh">

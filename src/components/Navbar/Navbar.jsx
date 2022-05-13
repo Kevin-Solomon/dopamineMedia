@@ -17,11 +17,13 @@ import {
   FormLabel,
   Center,
   useToast,
+  useMediaQuery,
 } from '@chakra-ui/react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, NavLink, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { addPostFunction } from './../../feature/post/postSlice';
 function Navbar() {
+  const [isLessThan600] = useMediaQuery('(max-width:1000px)');
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [post, setPost] = useState({ content: '', img: '' });
   const navigate = useNavigate();
@@ -31,6 +33,7 @@ function Navbar() {
   } = useSelector(state => state);
   const dispatch = useDispatch();
   const { loading, error } = useSelector(state => state.post);
+
   return (
     <Box
       bg="#ffffff"
@@ -56,13 +59,39 @@ function Navbar() {
           />
         </Box>
       )}
-      <Box width="60%" margin="0 auto" d="flex" justifyContent="space-between">
-        <Text>This is the Box</Text>
+      <Box
+        width={isLessThan600 ? '100%' : '60%'}
+        margin="0 auto"
+        d="flex"
+        justifyContent="space-between"
+      >
+        <Link to="/">
+          <Text>dopamineMedia</Text>
+        </Link>
         <Box d="flex" gap="1rem">
-          <Box>{getIcons('OUTLINE_HOME', '27px')}</Box>
+          <NavLink
+            to="/"
+            style={({ isActive }) => {
+              return {
+                color: isActive ? '#3182CE' : '',
+              };
+            }}
+          >
+            <Box>{getIcons('OUTLINE_HOME', '27px')}</Box>
+          </NavLink>
+
           <Box onClick={() => onOpen()}>{getIcons('ADD_OUTLINE', '27px')}</Box>
-          <Box>{getIcons('EXPLORE_OUTLINE', '27px')}</Box>
-          <Box>{getIcons('OUTLINE_HEART', '27px')}</Box>
+          <NavLink
+            to={`/${user._id}/bookmark`}
+            style={({ isActive }) => {
+              return {
+                color: isActive ? '#3182CE' : '',
+              };
+            }}
+          >
+            <Box>{getIcons('BOOKMARK', '27px')}</Box>
+          </NavLink>
+
           <Avatar
             cursor="pointer"
             onClick={() => {
@@ -88,13 +117,11 @@ function Navbar() {
             <FormLabel htmlFor="image">Click here</FormLabel>
             <Input
               display="none"
-              src="https://bit.ly/naruto-sage"
               id="image"
               type="file"
               onChange={e => {
                 e.preventDefault();
                 const reader = new FileReader();
-
                 reader.readAsDataURL(e.target.files[0]);
                 reader.onload = e => {
                   e.preventDefault();
@@ -138,7 +165,6 @@ function Navbar() {
               marginTop="20px"
               value={post.content}
               onChange={e => {
-                console.log('change', e.target.value);
                 setPost(prevPost => ({ ...prevPost, content: e.target.value }));
               }}
             />

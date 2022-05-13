@@ -14,7 +14,7 @@ export const addFollowers = createAsyncThunk(
         method: 'POST',
         headers: { authorization: token },
       });
-      console.log(response);
+
       return response.data.user.following.map(follow => follow.username);
     } catch (err) {
       console.log(err);
@@ -30,7 +30,7 @@ export const removeFromFollowers = createAsyncThunk(
         method: 'POST',
         headers: { authorization: token },
       });
-      console.log(response);
+
       return response.data.user.following.map(follow => follow.username);
     } catch (err) {
       console.log(err);

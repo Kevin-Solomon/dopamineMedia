@@ -12,4 +12,3 @@ export const store = configureStore({
     followers: followerReducer,
   },
 });
-console.log(store);

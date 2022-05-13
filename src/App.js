@@ -35,7 +35,23 @@ function App() {
         }
       />
       <Route path="*" element={<NotFound />} />
-      <Route path="/post/:postId" element={<SinglePost />} />
+      <Route path="/not-found" element={<NotFound />} />
+      <Route
+        path="/post/:postId"
+        element={
+          <RequireAuth>
+            <SinglePost />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="/:userId/bookmark"
+        element={
+          <RequireAuth>
+            <Profile />
+          </RequireAuth>
+        }
+      />
     </Routes>
   );
 }

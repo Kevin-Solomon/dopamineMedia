@@ -114,7 +114,6 @@ export const createPostHandler = function (schema, request) {
       updatedAt: formatDate(),
     };
     this.db.posts.insert(post);
-    console.log(this.db.posts);
     return new Response(201, {}, { posts: this.db.posts });
   } catch (error) {
     return new Response(
@@ -193,7 +192,6 @@ export const likePostHandler = function (schema, request) {
     }
     const postId = request.params.postId;
     const post = schema.posts.findBy({ _id: postId }).attrs;
-    console.log(post);
     if (post.likes.likedBy.some(currUser => currUser._id === user._id)) {
       return new Response(
         400,

@@ -6,18 +6,10 @@ import UserCard from '../../../../../components/UserCard/UserCard';
 function FollowerList() {
   const { followers } = useSelector(state => state.followers);
   const { user } = useSelector(state => state.auth);
-  console.log(user.username);
   const [suggestedFollowers, setSuggestedFollowers] = useState([]);
-  console.log(suggestedFollowers);
   useEffect(() => {
     async function getUsers() {
       const response = await axios({ method: 'GET', url: '/api/users' });
-      console.log(
-        response.data.users.filter(users => {
-          console.log(users.username === user.username);
-          users.username !== user.username;
-        })
-      );
 
       setSuggestedFollowers(
         response.data.users

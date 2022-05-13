@@ -5,6 +5,7 @@ const initialState = {
   loading: false,
   error: false,
   totalPost: 0,
+  pageNumber: 1,
 };
 export const getAllPost = createAsyncThunk('post/getAllPost', async () => {
   const response = await axios({ method: 'GET', url: '/api/posts' });
@@ -168,7 +169,11 @@ export const getQueryPost = createAsyncThunk(
 export const postSlice = createSlice({
   name: 'post',
   initialState,
-  reducers: {},
+  reducers: {
+    incrementPage: state => {
+      state.pageNumber += 1;
+    },
+  },
   extraReducers: {
     // [getAllPost.pending]: state => {
     //   state.loading = true;
@@ -296,5 +301,5 @@ export const postSlice = createSlice({
     },
   },
 });
-
+export const { incrementPage } = postSlice.actions;
 export default postSlice.reducer;
