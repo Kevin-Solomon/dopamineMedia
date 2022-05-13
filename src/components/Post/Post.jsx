@@ -20,6 +20,7 @@ import {
   IconButton,
 } from '@chakra-ui/react';
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   addComment,
@@ -40,6 +41,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { removeFromFollowers } from './../../feature/followers/followerSlice';
 function Post({ username, likes, content, img, _id, comments }) {
+  const navigate = useNavigate();
   const postId = _id;
   const toast = useToast();
   const postState = useSelector(state => state.post);
@@ -75,7 +77,14 @@ function Post({ username, likes, content, img, _id, comments }) {
     getComments();
   }, [user.token]);
   return (
-    <Box w="100%" margin="10px auto" backgroundColor="#ffffff">
+    <Box
+      w="100%"
+      margin="10px auto"
+      backgroundColor="#ffffff"
+      onClick={() => {
+        navigate(`/post/${postId}`);
+      }}
+    >
       <Box
         d="flex"
         justifyContent="space-between"
@@ -87,11 +96,7 @@ function Post({ username, likes, content, img, _id, comments }) {
         <Box d="flex" justifyContent="space-between">
           <Box>
             <Link to={`/${postAuthor?._id}`}>
-              <Avatar
-                size="sm"
-                name={username}
-                src="hdttps://bit.ly/kent-c-dodds"
-              />
+              <Avatar size="sm" name={username} />
             </Link>
 
             <Text>{username}</Text>
@@ -188,9 +193,12 @@ function Post({ username, likes, content, img, _id, comments }) {
         <Box d="flex" justifyContent="space-between">
           <Box d="flex">
             <Box>
-              {likes.likedBy.some(users => users.username === user.username) ? (
+              {likes?.likedBy?.some(
+                users => users.username === user.username
+              ) ? (
                 <Box
-                  onClick={() => {
+                  onClick={e => {
+                    e.stopPropagation();
                     dispatch(deleteFromLike({ _id, token }));
                     toast({
                       title: 'You no longer like this post',
@@ -204,7 +212,8 @@ function Post({ username, likes, content, img, _id, comments }) {
                 </Box>
               ) : (
                 <Box
-                  onClick={() => {
+                  onClick={e => {
+                    e.stopPropagation();
                     dispatch(addToLike({ _id, token }));
                     toast({
                       title: 'You liked this post',
@@ -223,7 +232,8 @@ function Post({ username, likes, content, img, _id, comments }) {
           <Box>
             {bookmarkState.bookmark.includes(_id) ? (
               <Box
-                onClick={() => {
+                onClick={e => {
+                  e.stopPropagation();
                   dispatch(deleteBookmark({ _id, token }));
                   toast({
                     title: 'This post has been removed from bookmarks',
@@ -237,7 +247,8 @@ function Post({ username, likes, content, img, _id, comments }) {
               </Box>
             ) : (
               <Box
-                onClick={() => {
+                onClick={e => {
+                  e.stopPropagation();
                   dispatch(addBookmark({ _id, token }));
                   toast({
                     title: 'Moved post to bookmark',

@@ -1,28 +1,42 @@
 import React from 'react';
+import { ShareSocial } from 'react-share-social';
 import {
-  EmailShareButton,
-  FacebookShareButton,
-  LinkedinShareButton,
-  PinterestShareButton,
-  RedditShareButton,
-  TelegramShareButton,
-  TwitterShareButton,
-} from 'react-share';
-function ShareModal({ isOpen, onClose }) {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalCloseButton,
+  Box,
+  Text,
+} from '@chakra-ui/react';
+import { getIcons } from '../../util/getIcons';
+function ShareModal({ isOpen, onClose, shareURL }) {
+  const style = {
+    paddingTop: '0px',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    padding: '0px',
+    borderRadius: 3,
+    margin: 0,
+    border: 0,
+    color: 'white',
+  };
+  const URL = window.location.href;
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Modal Title</ModalHeader>
+        <ModalHeader>Share To</ModalHeader>
         <ModalCloseButton />
-        <ModalBody></ModalBody>
-
-        <ModalFooter>
-          <Button colorScheme="blue" mr={3} onClick={onClose}>
-            Close
-          </Button>
-          <Button variant="ghost">Secondary Action</Button>
-        </ModalFooter>
+        <ModalBody>
+          <ShareSocial
+            style={style}
+            url={URL}
+            socialTypes={['facebook', 'twitter', 'reddit', 'linkedin']}
+          />
+        </ModalBody>
       </ModalContent>
     </Modal>
   );
