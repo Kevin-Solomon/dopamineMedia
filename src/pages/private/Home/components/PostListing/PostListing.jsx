@@ -19,10 +19,12 @@ function PostListing() {
   console.log(pageNumber);
   useEffect(() => {
     if (post.length === 0) {
+      console.log('inline1');
       dispatch(getQueryPost({ pageNumber }));
       return;
     }
     if (totalPost === post.length) return;
+    if (pageNumber * 5 === post.length) return;
     dispatch(getQueryPost({ pageNumber }));
   }, [token, pageNumber]);
   useEffect(() => {
@@ -35,6 +37,7 @@ function PostListing() {
 
         if (totalPost === post.length) return;
         if (Math.floor(post.length / 5) + 1 === pageNumber) return;
+        console.log('inline3');
         dispatch(incrementPage());
       }
     };

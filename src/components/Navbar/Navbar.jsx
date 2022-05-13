@@ -31,9 +31,7 @@ function Navbar() {
   } = useSelector(state => state);
   const dispatch = useDispatch();
   const { loading, error } = useSelector(state => state.post);
-  let activeStyle = {
-    color: 'blue.600',
-  };
+
   return (
     <Box
       bg="#ffffff"
@@ -67,10 +65,12 @@ function Navbar() {
           <NavLink
             to="/"
             style={({ isActive }) => {
-              isActive ? activeStyle : (activeStyle.color = 'none');
+              return {
+                color: isActive ? '#3182CE' : '',
+              };
             }}
           >
-            <Box {...activeStyle}>{getIcons('OUTLINE_HOME', '27px')}</Box>
+            <Box>{getIcons('OUTLINE_HOME', '27px')}</Box>
           </NavLink>
 
           <Box onClick={() => onOpen()}>{getIcons('ADD_OUTLINE', '27px')}</Box>
