@@ -68,7 +68,15 @@ function SinglePost() {
             />
           </Box>
         )}
-        <Box d="flex" flexDirection="column" maxW="30rem" margin="0 auto">
+        <Box
+          d="flex"
+          gap="10px"
+          flexDirection="column"
+          maxW="30rem"
+          margin="0 auto"
+          border="1px solid #dbdbdb"
+          padding="15px"
+        >
           <Box d="flex" alignItems="center" gap="2" w="100%">
             <Avatar size="sm" name={currPost.username} />
             <Text>{currPost.username}</Text>
