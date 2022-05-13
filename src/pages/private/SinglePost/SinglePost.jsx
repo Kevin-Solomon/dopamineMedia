@@ -8,6 +8,9 @@ import {
   useDisclosure,
   Image,
   useToast,
+  Skeleton,
+  Stack,
+  Spinner,
 } from '@chakra-ui/react';
 import Navbar from '../../../components/Navbar/Navbar';
 import { getIcons } from '../../../util/getIcons';
@@ -48,10 +51,23 @@ function SinglePost() {
     }
     getPost();
   }, [bookmark, post]);
+  console.log(loading);
   return (
     <Box>
       <Navbar />
       <Box mt={16}>
+        {loading && (
+          <Box h="100vh" w="100vw" position="fixed" bg="#fff" opacity="0.5">
+            <Spinner
+              color="red.500"
+              size="xl"
+              position="absolute"
+              top="50%"
+              left="50%"
+              transform="translate(-50%,-50%)"
+            />
+          </Box>
+        )}
         <Box d="flex" flexDirection="column" maxW="30rem" margin="0 auto">
           <Box d="flex" alignItems="center" gap="2" w="100%">
             <Avatar size="sm" name={currPost.username} />
