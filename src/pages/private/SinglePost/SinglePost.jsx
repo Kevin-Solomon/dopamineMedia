@@ -1,15 +1,32 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Box, Avatar, Text, useDisclosure, Image } from '@chakra-ui/react';
+import {
+  Box,
+  Avatar,
+  Text,
+  useDisclosure,
+  Image,
+  useToast,
+} from '@chakra-ui/react';
 import Navbar from '../../../components/Navbar/Navbar';
 import { getIcons } from '../../../util/getIcons';
 import ShareModal from '../../../components/ShareModal/ShareModal';
-
+import { useSelector, useDispatch } from 'react-redux';
+import { addToLike, deleteFromLike } from './../../../feature/post/postSlice';
+import {
+  deleteBookmark,
+  addBookmark,
+} from './../../../feature/bookmark/bookmarkSlice';
 function SinglePost() {
+  const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { postId } = useParams();
-  const [post, setPost] = useState({
+  const { post } = useSelector(state => state.post);
+  const { user, token } = useSelector(state => state.auth);
+  const { bookmark } = useSelector(state => state.bookmark);
+  const dispatch = useDispatch();
+  const [currPost, setPost] = useState({
     key: '',
     username: '',
     likes: [],
@@ -30,22 +47,89 @@ function SinglePost() {
       setPost(response.data.post);
     }
     getPost();
-  }, []);
+  }, [bookmark, post]);
   return (
     <Box>
       <Navbar />
       <Box mt={16}>
         <Box d="flex" flexDirection="column" maxW="30rem" margin="0 auto">
           <Box d="flex" alignItems="center" gap="2" w="100%">
-            <Avatar size="sm" name={post.username} />
-            <Text>{post.username}</Text>
+            <Avatar size="sm" name={currPost.username} />
+            <Text>{currPost.username}</Text>
           </Box>
-          {post.img === '' ? null : <Image />}
-          <Box>{post.content}</Box>
+          {currPost.img === '' ? null : <Image />}
+          <Box>{currPost.content}</Box>
           <Box d="flex" justifyContent="space-between" my={4}>
             <Box d="flex" gap={2}>
-              <Box>{getIcons('OUTLINE_HEART', '27px')}</Box>
-              <Box>{getIcons('BOOKMARK', '27px')}</Box>
+              <Box>
+                {currPost?.likes?.likedBy?.some(
+                  users => users.username === user.username
+                ) ? (
+                  <Box
+                    onClick={e => {
+                      e.stopPropagation();
+                      dispatch(deleteFromLike({ _id: currPost._id, token }));
+                      toast({
+                        title: 'You no longer like this post',
+                        status: 'error',
+                        duration: 5000,
+                        isClosable: true,
+                      });
+                    }}
+                  >
+                    {getIcons('LIKE_FILL', '27px')}
+                  </Box>
+                ) : (
+                  <Box
+                    onClick={e => {
+                      e.stopPropagation();
+                      dispatch(addToLike({ _id: currPost._id, token }));
+                      toast({
+                        title: 'You liked this post',
+                        status: 'success',
+                        duration: 5000,
+                        isClosable: true,
+                      });
+                    }}
+                  >
+                    {getIcons('OUTLINE_HEART', '27px')}
+                  </Box>
+                )}
+              </Box>
+              <Box>
+                {bookmark.includes(currPost._id) ? (
+                  <Box
+                    onClick={e => {
+                      e.stopPropagation();
+                      dispatch(deleteBookmark({ _id: currPost._id, token }));
+                      toast({
+                        title: 'This post has been removed from bookmarks',
+                        status: 'error',
+                        duration: 5000,
+                        isClosable: true,
+                      });
+                    }}
+                  >
+                    {getIcons('BOOKMARK_FILL', '27px')}
+                  </Box>
+                ) : (
+                  <Box
+                    onClick={e => {
+                      e.stopPropagation();
+                      dispatch(addBookmark({ _id: currPost._id, token }));
+                      toast({
+                        title: 'Moved post to bookmark',
+                        status: 'success',
+                        duration: 5000,
+                        isClosable: true,
+                      });
+                    }}
+                  >
+                    {' '}
+                    {getIcons('BOOKMARK', '27px')}
+                  </Box>
+                )}
+              </Box>
             </Box>
 
             <Box onClick={onOpen}>{getIcons('SHARE', '27px')}</Box>
