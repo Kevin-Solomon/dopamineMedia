@@ -18,7 +18,7 @@ import {
   Center,
   useToast,
 } from '@chakra-ui/react';
-import { useNavigate, NavLink } from 'react-router-dom';
+import { useNavigate, NavLink, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { addPostFunction } from './../../feature/post/postSlice';
 function Navbar() {
@@ -60,7 +60,9 @@ function Navbar() {
         </Box>
       )}
       <Box width="60%" margin="0 auto" d="flex" justifyContent="space-between">
-        <Text>This is the Box</Text>
+        <Link to="/">
+          <Text>dopamineMedia</Text>
+        </Link>
         <Box d="flex" gap="1rem">
           <NavLink
             to="/"

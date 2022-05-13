@@ -166,17 +166,20 @@ function Profile() {
             {user.username === auth.user.username ? (
               <TabPanel>
                 {auth.user.post.map(
-                  ({ username, likes, content, _id, img, comments }) => (
-                    <Post
-                      comments={comments}
-                      key={_id}
-                      username={username}
-                      likes={likes}
-                      content={content}
-                      img={img}
-                      _id={_id}
-                    />
-                  )
+                  ({ username, likes, content, _id, img, comments }) => {
+                    console.log(likes);
+                    return (
+                      <Post
+                        comments={comments}
+                        key={_id}
+                        username={username}
+                        likes={likes}
+                        content={content}
+                        img={img}
+                        _id={_id}
+                      />
+                    );
+                  }
                 )}
               </TabPanel>
             ) : (
