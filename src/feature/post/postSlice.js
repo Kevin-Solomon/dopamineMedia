@@ -4,6 +4,7 @@ const initialState = {
   post: [],
   loading: false,
   error: false,
+  totalPost: 0,
 };
 export const getAllPost = createAsyncThunk('post/getAllPost', async () => {
   const response = await axios({ method: 'GET', url: '/api/posts' });
@@ -62,6 +63,68 @@ export const editPost = createAsyncThunk(
     }
   }
 );
+export const addComment = createAsyncThunk(
+  'post/addComment',
+  async ({ _id, token, comment }) => {
+    try {
+      const response = await axios({
+        method: 'POST',
+        url: `/api/comments/add/${_id}`,
+        headers: { authorization: token },
+        data: { commentData: comment },
+      });
+      console.log(response);
+      return response.data.posts;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+);
+export const deleteComment = createAsyncThunk(
+  'post/deleteComment',
+  async ({ postId, commentId, token }) => {
+    try {
+      const response = await axios({
+        method: 'POST',
+        url: `/api/comments/delete/${postId}/${commentId}`,
+        headers: { authorization: token },
+      });
+      return response.data.posts;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+);
+export const upvoteComment = createAsyncThunk(
+  'post/upvoteComment',
+  async ({ postId, commentId, token }) => {
+    try {
+      const response = await axios({
+        method: 'POST',
+        url: `/api/comments/upvote/${postId}/${commentId}`,
+        headers: { authorization: token },
+      });
+      return response.data.posts;
+    } catch (err) {
+      console.log(err.response);
+    }
+  }
+);
+export const downvoteComment = createAsyncThunk(
+  'post/downvoteComment',
+  async ({ postId, commentId, token }) => {
+    try {
+      const response = await axios({
+        method: 'POST',
+        url: `/api/comments/downvote/${postId}/${commentId}`,
+        headers: { authorization: token },
+      });
+      return response.data.posts;
+    } catch (err) {
+      console.log(err.response);
+    }
+  }
+);
 export const addToLike = createAsyncThunk(
   'post/addLike',
   async ({ _id, token }) => {
@@ -92,22 +155,32 @@ export const deleteFromLike = createAsyncThunk(
     }
   }
 );
+export const getQueryPost = createAsyncThunk(
+  'post/getQueryPost',
+  async ({ pageNumber }) => {
+    const response = await axios({
+      method: 'GET',
+      url: `api/post/${pageNumber}`,
+    });
+    return { posts: response.data.posts, totalPost: response.data.totalPost };
+  }
+);
 export const postSlice = createSlice({
   name: 'post',
   initialState,
   reducers: {},
   extraReducers: {
-    [getAllPost.pending]: state => {
-      state.loading = true;
-    },
-    [getAllPost.fulfilled]: (state, { payload }) => {
-      state.post = [...payload];
-      state.loading = false;
-    },
-    [getAllPost.rejected]: state => {
-      state.loading = false;
-      state.error = true;
-    },
+    // [getAllPost.pending]: state => {
+    //   state.loading = true;
+    // },
+    // [getAllPost.fulfilled]: (state, { payload }) => {
+    //   state.post = [...payload];
+    //   state.loading = false;
+    // },
+    // [getAllPost.rejected]: state => {
+    //   state.loading = false;
+    //   state.error = true;
+    // },
     [addPostFunction.pending]: state => {
       state.loading = true;
     },
@@ -161,6 +234,63 @@ export const postSlice = createSlice({
       state.loading = true;
     },
     [deleteFromLike.rejected]: state => {
+      state.loading = false;
+      state.error = true;
+    },
+    [addComment.pending]: state => {
+      state.pending = true;
+    },
+    [addComment.rejected]: state => {
+      state.pending = false;
+      state.error = true;
+    },
+    [addComment.fulfilled]: (state, { payload }) => {
+      state.pending = false;
+      state.post = payload;
+    },
+    [deleteComment.fulfilled]: (state, { payload }) => {
+      state.pending = false;
+      state.post = payload;
+    },
+    [deleteComment.rejected]: state => {
+      state.pending = false;
+      state.error = true;
+    },
+    [deleteComment.pending]: state => {
+      state.pending = true;
+    },
+    [upvoteComment.pending]: state => {
+      state.pending = true;
+    },
+    [upvoteComment.fulfilled]: (state, { payload }) => {
+      state.pending = false;
+      state.post = payload;
+    },
+    [upvoteComment.rejected]: state => {
+      state.pending = false;
+      state.error = true;
+    },
+    [downvoteComment.rejected]: state => {
+      state.pending = false;
+      state.error = true;
+    },
+    [downvoteComment.fulfilled]: (state, { payload }) => {
+      state.pending = false;
+      state.post = payload;
+    },
+    [downvoteComment.pending]: state => {
+      state.pending = true;
+    },
+    [getQueryPost.pending]: state => {
+      state.loading = true;
+    },
+    [getQueryPost.fulfilled]: (state, { payload }) => {
+      console.log(payload);
+      state.loading = false;
+      state.post = [...state.post, ...payload.posts];
+      state.totalPost = payload.totalPost;
+    },
+    [getQueryPost.rejected]: state => {
       state.loading = false;
       state.error = true;
     },

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import {
   Input,
   FormControl,
@@ -24,6 +24,7 @@ import {
   useMediaQuery,
   useDisclosure,
   Button,
+  AvatarBadge,
 } from '@chakra-ui/react';
 import Navbar from '../../../components/Navbar/Navbar';
 import { postUser } from '../../../service/postUser';
@@ -35,7 +36,9 @@ import {
   removeFromFollowers,
 } from './../../../feature/followers/followerSlice';
 import { editUserDetails } from './../../../feature/auth/authSlice';
+import { Link } from '@chakra-ui/react';
 function Profile() {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { post } = useSelector(state => state);
   const { bookmark } = useSelector(state => state);
@@ -53,23 +56,30 @@ function Profile() {
     lastName: 'User',
     bio: '',
     posts: 0,
+    portfolio: '',
+    img: '',
   });
   const [editUser, setEditUser] = useState({
     ...user,
   });
+  console.log(editUser);
   const { userId } = useParams();
   useEffect(() => {
     const getUser = async () => {
-      const response = await axios({
-        method: 'GET',
-        url: `/api/users/${userId}`,
-      });
-      console.log(response);
-      setUser(prevPost => ({ ...prevPost, ...response.data.user }));
-      setEditUser(prevPost => ({ ...prevPost, ...response.data.user }));
+      try {
+        const response = await axios({
+          method: 'GET',
+          url: `/api/users/${userId}`,
+        });
+        console.log(response);
+        setUser(prevPost => ({ ...prevPost, ...response.data.user }));
+        setEditUser(prevPost => ({ ...prevPost, ...response.data.user }));
+      } catch (err) {
+        navigate('*');
+      }
     };
     getUser();
-  }, [userId, followers.followers, auth.token]);
+  }, [userId, followers.followers, auth.token, auth.user]);
   const getIndex = () => {
     if (location.pathname.includes('bookmark')) return 1;
     if (location.pathname.includes('tagged')) return 0;
@@ -83,7 +93,11 @@ function Profile() {
       <Navbar />
       <Box padding="0.8rem" maxW="800px" margin="4rem auto">
         <Box d="flex" gap={isLessThan640 ? '1rem' : '3rem'}>
-          <Avatar size={isLessThan640 ? 'xl' : '2xl'} name={user.username} />
+          <Avatar
+            src={user.img}
+            size={isLessThan640 ? 'xl' : '2xl'}
+            name={user.username}
+          />
           <Box d="flex" gap="1rem" flexDirection="column">
             <Box d="flex" alignItems="center" gap="1rem">
               <Text fontSize="2xl">{user.username}</Text>
@@ -134,6 +148,9 @@ function Profile() {
             </Box>
             <Text>{`${user.firstName} ${user.lastName}`}</Text>
             <Text>{auth.user.bio}</Text>
+            <Link href={user.portfolio} color="blue.500" isExternal>
+              {auth.user.portfolio}
+            </Link>
           </Box>
         </Box>
         <Divider marginTop="10px" color="black" />
@@ -172,60 +189,118 @@ function Profile() {
           <ModalHeader>Edit User</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <FormControl>
-              <FormLabel htmlFor="username">Username</FormLabel>
-              <Input
-                name="username"
-                id="username"
-                placeholder="Username"
-                value={editUser.username}
-                onChange={e => {
-                  setEditUser(prev => ({
-                    ...prev,
-                    [e.target.name]: e.target.value,
-                  }));
-                }}
-              />
-              <FormLabel htmlFor="firstName">First Name</FormLabel>
-              <Input
-                name="firstName"
-                id="firstName"
-                placeholder="First Name"
-                value={editUser.firstName}
-                onChange={e => {
-                  setEditUser(prev => ({
-                    ...prev,
-                    [e.target.name]: e.target.value,
-                  }));
-                }}
-              />
-              <FormLabel htmlFor="lastName">Last Name</FormLabel>
-              <Input
-                name="lastName"
-                id="lastName"
-                placeholder="Last Name"
-                value={editUser.lastName}
-                onChange={e => {
-                  setEditUser(prev => ({
-                    ...prev,
-                    [e.target.name]: e.target.value,
-                  }));
-                }}
-              />
-              <FormLabel htmlFor="bio">Bio</FormLabel>
-              <Input
-                name="bio"
-                id="bio"
-                placeholder="Bio"
-                value={editUser.bio}
-                onChange={e => {
-                  setEditUser(prev => ({
-                    ...prev,
-                    [e.target.name]: e.target.value,
-                  }));
-                }}
-              />
-            </FormControl>
+            <Box d="flex" flexDirection="column" gap="3">
+              <Avatar size="xl" src={editUser.img}>
+                <AvatarBadge
+                  position="absolute"
+                  top="-20px"
+                  right="-5px"
+                  boxSize="1.25em"
+                  bg="red.500"
+                >
+                  {getIcons('CANCEL', '27px')}
+                </AvatarBadge>
+                <FormLabel
+                  top="40%"
+                  left="15%"
+                  position="absolute"
+                  htmlFor="profile-img"
+                >
+                  Change
+                </FormLabel>
+                <Input
+                  onChange={e => {
+                    e.preventDefault();
+                    console.log(e);
+                    const reader = new FileReader();
+                    reader.readAsDataURL(e.target.files[0]);
+                    reader.onload = e => {
+                      e.preventDefault();
+                      console.log(reader.result);
+                      setEditUser(prevPost => ({
+                        ...prevPost,
+                        img: reader.result,
+                      }));
+                    };
+                  }}
+                  display="none"
+                  id="profile-img"
+                  type="file"
+                />
+              </Avatar>
+              <FormControl>
+                <FormLabel htmlFor="username">Username</FormLabel>
+                <Input
+                  my="1"
+                  name="username"
+                  id="username"
+                  placeholder="Username"
+                  value={editUser.username}
+                  onChange={e => {
+                    setEditUser(prev => ({
+                      ...prev,
+                      [e.target.name]: e.target.value,
+                    }));
+                  }}
+                />
+                <FormLabel htmlFor="firstName">First Name</FormLabel>
+                <Input
+                  my="1"
+                  name="firstName"
+                  id="firstName"
+                  placeholder="First Name"
+                  value={editUser.firstName}
+                  onChange={e => {
+                    setEditUser(prev => ({
+                      ...prev,
+                      [e.target.name]: e.target.value,
+                    }));
+                  }}
+                />
+                <FormLabel htmlFor="lastName">Last Name</FormLabel>
+                <Input
+                  my="1"
+                  name="lastName"
+                  id="lastName"
+                  placeholder="Last Name"
+                  value={editUser.lastName}
+                  onChange={e => {
+                    setEditUser(prev => ({
+                      ...prev,
+                      [e.target.name]: e.target.value,
+                    }));
+                  }}
+                />
+                <FormLabel htmlFor="bio">Bio</FormLabel>
+                <Input
+                  my="1"
+                  name="bio"
+                  id="bio"
+                  placeholder="Bio"
+                  value={editUser.bio}
+                  onChange={e => {
+                    setEditUser(prev => ({
+                      ...prev,
+                      [e.target.name]: e.target.value,
+                    }));
+                  }}
+                />
+                <FormLabel htmlFor="portfolio">Portfolio</FormLabel>
+                <Input
+                  my="1"
+                  name="portfolio"
+                  id="portfolio"
+                  placeholder="portfolio"
+                  value={editUser.portfolio}
+                  onChange={e => {
+                    setEditUser(prev => ({
+                      ...prev,
+                      [e.target.name]: e.target.value,
+                    }));
+                  }}
+                />
+              </FormControl>
+            </Box>
           </ModalBody>
 
           <ModalFooter>

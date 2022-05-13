@@ -17,10 +17,18 @@ import {
   PopoverBody,
   PopoverTrigger,
   useToast,
+  IconButton,
 } from '@chakra-ui/react';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { deletePost } from '../../feature/post/postSlice';
+import {
+  addComment,
+  deleteComment,
+  deletePost,
+  upvoteComment,
+  downvoteComment,
+} from '../../feature/post/postSlice';
 import { editPost } from '../../feature/post/postSlice';
 import { addToLike, deleteFromLike } from '../../feature/post/postSlice';
 import {
@@ -28,48 +36,55 @@ import {
   deleteBookmark,
 } from './../../feature/bookmark/bookmarkSlice';
 import LikedBy from '../LikedBy/LikedBy';
-// import { addToLike } from '../../service/addToLike';
-import { useAuth, useBookmark, useFollowers, usePost } from '../../context';
 import { getIcons } from '../../util/getIcons';
-import { updatePost } from './../../service';
-import {
-  removeFromFollow,
-  removeFromLike,
-  addToBookmark,
-  removeFromBookmark,
-} from './../../service';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { removeFromFollowers } from './../../feature/followers/followerSlice';
-function Post({ username, likes, content, img, _id }) {
+function Post({ username, likes, content, img, _id, comments }) {
+  const navigate = useNavigate();
+  const postId = _id;
   const toast = useToast();
   const postState = useSelector(state => state.post);
   const bookmarkState = useSelector(state => state.bookmark);
   const { user, token } = useSelector(state => state.auth);
-  console.log(token);
   const dispatch = useDispatch();
-  console.log(bookmarkState);
-  // const { followerState, followerDispatch } = useFollowers();
-  // const { bookmarkState, bookmarkDispatch } = useBookmark();
   const [editable, setEditable] = useState(false);
-  const [post, setPost] = useState({ content: content, img: img });
+  const [editComment, setEditComment] = useState(true);
+  const [post, setPost] = useState({
+    content: content,
+    img: img,
+    comments: comments,
+  });
+  console.log(post);
+  const commentRef = useRef(null);
   const [postAuthor, setAuthor] = useState({ _id: '' });
-  // const { authState } = useAuth();
-  // const { postDispatch } = usePost();
-
   useEffect(() => {
     async function getUsers() {
       const response = await axios({ method: 'GET', url: '/api/users' });
       const user = response.data.users.filter(
         user => user.username === username
       );
-
       setAuthor(user[0]);
     }
+    async function getComments() {
+      const response = await axios({
+        method: 'GET',
+        url: `/api/comments/${_id}`,
+      });
+      console.log(response);
+    }
     getUsers();
+    getComments();
   }, [user.token]);
   return (
-    <Box w="100%" margin="10px auto" backgroundColor="#ffffff">
+    <Box
+      w="100%"
+      margin="10px auto"
+      backgroundColor="#ffffff"
+      onClick={() => {
+        navigate(`/post/${postId}`);
+      }}
+    >
       <Box
         d="flex"
         justifyContent="space-between"
@@ -80,12 +95,8 @@ function Post({ username, likes, content, img, _id }) {
       >
         <Box d="flex" justifyContent="space-between">
           <Box>
-            <Link to={`/${postAuthor._id}`}>
-              <Avatar
-                size="sm"
-                name={username}
-                src="hdttps://bit.ly/kent-c-dodds"
-              />
+            <Link to={`/${postAuthor?._id}`}>
+              <Avatar size="sm" name={username} />
             </Link>
 
             <Text>{username}</Text>
@@ -182,9 +193,12 @@ function Post({ username, likes, content, img, _id }) {
         <Box d="flex" justifyContent="space-between">
           <Box d="flex">
             <Box>
-              {likes.likedBy.some(users => users.username === user.username) ? (
+              {likes?.likedBy?.some(
+                users => users.username === user.username
+              ) ? (
                 <Box
-                  onClick={() => {
+                  onClick={e => {
+                    e.stopPropagation();
                     dispatch(deleteFromLike({ _id, token }));
                     toast({
                       title: 'You no longer like this post',
@@ -198,7 +212,8 @@ function Post({ username, likes, content, img, _id }) {
                 </Box>
               ) : (
                 <Box
-                  onClick={() => {
+                  onClick={e => {
+                    e.stopPropagation();
                     dispatch(addToLike({ _id, token }));
                     toast({
                       title: 'You liked this post',
@@ -217,7 +232,8 @@ function Post({ username, likes, content, img, _id }) {
           <Box>
             {bookmarkState.bookmark.includes(_id) ? (
               <Box
-                onClick={() => {
+                onClick={e => {
+                  e.stopPropagation();
                   dispatch(deleteBookmark({ _id, token }));
                   toast({
                     title: 'This post has been removed from bookmarks',
@@ -231,7 +247,8 @@ function Post({ username, likes, content, img, _id }) {
               </Box>
             ) : (
               <Box
-                onClick={() => {
+                onClick={e => {
+                  e.stopPropagation();
                   dispatch(addBookmark({ _id, token }));
                   toast({
                     title: 'Moved post to bookmark',
@@ -254,11 +271,100 @@ function Post({ username, likes, content, img, _id }) {
             <LikedBy users={likes.likedBy} />
           )}
         </Text>
-        <Text></Text>
+        <Text>
+          {comments.map(({ comment, username, _id, votes }) => {
+            return (
+              <Box d="flex" gap="1" alignItems="center">
+                <Text fontWeight="700">{username}</Text>
+                <Input
+                  isReadOnly={true}
+                  border="none"
+                  h="24px"
+                  value={comment}
+                  onChange={e =>
+                    setPost(prev => ({ ...prev, comment: e.target.value }))
+                  }
+                />
+                <IconButton
+                  py="1"
+                  px="1"
+                  bg="none"
+                  _hover={{ bg: 'none' }}
+                  _focus={{ border: 'none' }}
+                  h="min-content"
+                  icon={getIcons('DELETE_POST', '16px')}
+                  onClick={() => {
+                    dispatch(deleteComment({ postId, commentId: _id, token }));
+                  }}
+                />
+                <Box>
+                  <IconButton
+                    _hover={{ bg: 'none' }}
+                    _focus={{ border: 'none' }}
+                    bg="none"
+                    h="min-content"
+                    aria-label="Search database"
+                    icon={getIcons('UPVOTE', '16px')}
+                    onClick={() => {
+                      dispatch(
+                        upvoteComment({ postId, commentId: _id, token })
+                      );
+                    }}
+                  />
+                  <Text textAlign="center">
+                    {votes.upvotedBy.length - votes.downvotedBy.length}
+                  </Text>
+                  <IconButton
+                    _hover={{ bg: 'none' }}
+                    _focus={{ border: 'none' }}
+                    bg="none"
+                    h="min-content"
+                    aria-label="Search database"
+                    icon={getIcons('DOWNVOTE', '16px')}
+                    onClick={() => {
+                      dispatch(
+                        downvoteComment({ postId, commentId: _id, token })
+                      );
+                    }}
+                  />
+                </Box>
+              </Box>
+            );
+          })}
+        </Text>
         <InputGroup size="md">
-          <Input pr="4.5rem" placeholder="Add a comment..." />
+          <Input
+            pr="4.5rem"
+            placeholder="Add a comment..."
+            value={post.comments}
+            onChange={e =>
+              setPost(prev => ({ ...prev, comments: e.target.value }))
+            }
+          />
           <InputRightElement width="4.5rem">
-            <Button h="1.75rem" size="sm">
+            <Button
+              h="1.75rem"
+              size="sm"
+              onClick={() => {
+                if (post.comments.length === 0) {
+                  toast({
+                    title: 'Please write a commemnt',
+                    status: 'error',
+                    duration: 5000,
+                    isClosable: true,
+                  });
+                } else {
+                  dispatch(
+                    addComment({
+                      _id,
+                      comment: { comment: post.comments },
+                      token,
+                    })
+                  );
+                  setPost(prev => ({ ...prev, comments: '' }));
+                }
+              }}
+            >
               Post
             </Button>
           </InputRightElement>

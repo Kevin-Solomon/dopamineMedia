@@ -5,14 +5,24 @@ import {
   AiFillHome,
   AiOutlineComment,
   AiFillEdit,
+  AiFillDelete,
+  AiOutlineShareAlt,
+  AiOutlineMail,
+  AiOutlineTwitter,
 } from 'react-icons/ai';
 import {
   MdAddCircle,
   MdAddCircleOutline,
   MdOutlineExplore,
   MdExplore,
+  MdOutlineCancel,
 } from 'react-icons/md';
 import { BsThreeDots, BsBookmark, BsBookmarkFill } from 'react-icons/bs';
+import {
+  FaArrowAltCircleUp,
+  FaArrowAltCircleDown,
+  FaTelegramPlane,
+} from 'react-icons/fa';
 const getIcons = (type, size) => {
   const style = { fontSize: size, cursor: 'pointer' };
   switch (type) {
@@ -92,6 +102,54 @@ const getIcons = (type, size) => {
       return (
         <span style={style}>
           <AiFillEdit />
+        </span>
+      );
+    case 'CANCEL':
+      return (
+        <span style={style}>
+          <MdOutlineCancel />
+        </span>
+      );
+    case 'UPVOTE':
+      return (
+        <span style={style}>
+          <FaArrowAltCircleUp />
+        </span>
+      );
+    case 'DOWNVOTE':
+      return (
+        <span style={style}>
+          <FaArrowAltCircleDown />
+        </span>
+      );
+    case 'DELETE_POST':
+      return (
+        <span style={style}>
+          <AiFillDelete />
+        </span>
+      );
+    case 'SHARE':
+      return (
+        <span style={style}>
+          <AiOutlineShareAlt />
+        </span>
+      );
+    case 'EMAIL':
+      return (
+        <span style={style}>
+          <AiOutlineMail />
+        </span>
+      );
+    case 'TWITTER':
+      return (
+        <span style={style}>
+          <AiOutlineTwitter />
+        </span>
+      );
+    case 'TELEGRAM':
+      return (
+        <span style={style}>
+          <FaTelegramPlane />
         </span>
       );
 
