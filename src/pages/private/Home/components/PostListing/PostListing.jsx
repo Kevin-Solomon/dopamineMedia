@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Post from './../../../../../components/Post/Post';
 
-import { Box } from '@chakra-ui/react';
+import { Box, useMediaQuery } from '@chakra-ui/react';
 import { getQueryPost } from '../../../../../feature/post/postSlice';
 import { incrementPage } from '../../../../../feature/post/postSlice';
 import FollowerList from '../FollowerList/FollowerList';
@@ -13,13 +13,12 @@ function PostListing() {
   const { post, loading, error, totalPost, pageNumber } = useSelector(
     state => state.post
   );
+  const [isLessThan1000] = useMediaQuery('(max-width:1000px)');
   const { user, token } = useSelector(state => state.auth);
   const userPost = post.filter(post => post.username === user.username);
   const postList = post.filter(post => followers.includes(post.username));
-  console.log(pageNumber);
   useEffect(() => {
     if (post.length === 0) {
-      console.log('inline1');
       dispatch(getQueryPost({ pageNumber }));
       return;
     }
@@ -33,11 +32,8 @@ function PostListing() {
         window.innerHeight + document.documentElement.scrollTop ===
         document.body.offsetHeight
       ) {
-        console.log('end of the doc');
-
         if (totalPost === post.length) return;
         if (Math.floor(post.length / 5) + 1 === pageNumber) return;
-        console.log('inline3');
         dispatch(incrementPage());
       }
     };
@@ -63,7 +59,7 @@ function PostListing() {
           />
         ))}
       </Box>
-      <FollowerList />
+      {isLessThan1000 ? null : <FollowerList />}
     </Box>
   );
 }
