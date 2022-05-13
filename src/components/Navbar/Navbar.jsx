@@ -17,11 +17,13 @@ import {
   FormLabel,
   Center,
   useToast,
+  useMediaQuery,
 } from '@chakra-ui/react';
 import { useNavigate, NavLink, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { addPostFunction } from './../../feature/post/postSlice';
 function Navbar() {
+  const [isLessThan600] = useMediaQuery('(max-width:1000px)');
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [post, setPost] = useState({ content: '', img: '' });
   const navigate = useNavigate();
@@ -57,7 +59,12 @@ function Navbar() {
           />
         </Box>
       )}
-      <Box width="60%" margin="0 auto" d="flex" justifyContent="space-between">
+      <Box
+        width={isLessThan600 ? '100%' : '60%'}
+        margin="0 auto"
+        d="flex"
+        justifyContent="space-between"
+      >
         <Link to="/">
           <Text>dopamineMedia</Text>
         </Link>
