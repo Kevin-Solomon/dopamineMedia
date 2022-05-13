@@ -77,14 +77,7 @@ function Post({ username, likes, content, img, _id, comments }) {
     getComments();
   }, [user.token]);
   return (
-    <Box
-      w="100%"
-      margin="10px auto"
-      backgroundColor="#ffffff"
-      onClick={() => {
-        navigate(`/post/${postId}`);
-      }}
-    >
+    <Box w="100%" margin="10px auto" backgroundColor="#ffffff">
       <Box
         d="flex"
         justifyContent="space-between"
@@ -166,13 +159,25 @@ function Post({ username, likes, content, img, _id, comments }) {
         )}
         {editable ? (
           <Textarea
+            cursor="pointer"
+            onClick={() => {
+              navigate(`/post/${postId}`);
+            }}
             value={post.content}
             onChange={e =>
               setPost(prevPost => ({ ...prevPost, content: e.target.value }))
             }
           />
         ) : (
-          <Text readOnly>{content}</Text>
+          <Text
+            cursor="pointer"
+            onClick={() => {
+              navigate(`/post/${postId}`);
+            }}
+            readOnly
+          >
+            {content}
+          </Text>
         )}
         {editable ? (
           <Button
@@ -227,7 +232,13 @@ function Post({ username, likes, content, img, _id, comments }) {
                 </Box>
               )}
             </Box>
-            {getIcons('COMMENT', '27px')}
+            <Box
+              onClick={() => {
+                commentRef.current.focus();
+              }}
+            >
+              {getIcons('COMMENT', '27px')}
+            </Box>
           </Box>
           <Box>
             {bookmarkState.bookmark.includes(_id) ? (
@@ -334,6 +345,7 @@ function Post({ username, likes, content, img, _id, comments }) {
         </Text>
         <InputGroup size="md">
           <Input
+            ref={commentRef}
             pr="4.5rem"
             placeholder="Add a comment..."
             value={post.comments}

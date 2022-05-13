@@ -18,7 +18,7 @@ import {
   Center,
   useToast,
 } from '@chakra-ui/react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, NavLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { addPostFunction } from './../../feature/post/postSlice';
 function Navbar() {
@@ -31,6 +31,9 @@ function Navbar() {
   } = useSelector(state => state);
   const dispatch = useDispatch();
   const { loading, error } = useSelector(state => state.post);
+  let activeStyle = {
+    color: 'blue.600',
+  };
   return (
     <Box
       bg="#ffffff"
@@ -59,7 +62,16 @@ function Navbar() {
       <Box width="60%" margin="0 auto" d="flex" justifyContent="space-between">
         <Text>This is the Box</Text>
         <Box d="flex" gap="1rem">
-          <Box>{getIcons('OUTLINE_HOME', '27px')}</Box>
+          <NavLink
+            to="/"
+            style={({ isActive }) => {
+              console.log(isActive);
+              isActive ? activeStyle : (activeStyle.color = 'none');
+            }}
+          >
+            <Box {...activeStyle}>{getIcons('OUTLINE_HOME', '27px')}</Box>
+          </NavLink>
+
           <Box onClick={() => onOpen()}>{getIcons('ADD_OUTLINE', '27px')}</Box>
           <Box>{getIcons('EXPLORE_OUTLINE', '27px')}</Box>
           <Box>{getIcons('OUTLINE_HEART', '27px')}</Box>
@@ -88,13 +100,11 @@ function Navbar() {
             <FormLabel htmlFor="image">Click here</FormLabel>
             <Input
               display="none"
-              src="https://bit.ly/naruto-sage"
               id="image"
               type="file"
               onChange={e => {
                 e.preventDefault();
                 const reader = new FileReader();
-
                 reader.readAsDataURL(e.target.files[0]);
                 reader.onload = e => {
                   e.preventDefault();
