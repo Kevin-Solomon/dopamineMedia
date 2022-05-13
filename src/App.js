@@ -35,6 +35,7 @@ function App() {
         }
       />
       <Route path="*" element={<NotFound />} />
+      <Route path="/not-found" element={<NotFound />} />
       <Route
         path="/post/:postId"
         element={

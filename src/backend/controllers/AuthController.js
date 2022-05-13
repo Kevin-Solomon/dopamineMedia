@@ -16,7 +16,6 @@ const sign = require('jwt-encode');
 
 export const signupHandler = function (schema, request) {
   const { username, password, ...rest } = JSON.parse(request.requestBody);
-  console.log(username);
   try {
     // check if username already exists
     const foundUser = schema.users.findBy({ username: username });
@@ -80,12 +79,18 @@ export const loginHandler = function (schema, request) {
         }
       );
     }
+    const user = {
+      ...foundUser.attrs,
+      post: this.db.posts.filter(post => {
+        return post.username === foundUser.username;
+      }),
+    };
     if (password === foundUser.password) {
       const encodedToken = sign(
-        { _id: foundUser._id, username },
+        { _id: user._id, username },
         process.env.REACT_APP_JWT_SECRET
       );
-      return new Response(200, {}, { foundUser, encodedToken });
+      return new Response(200, {}, { foundUser: user, encodedToken });
     }
     return new Response(
       401,

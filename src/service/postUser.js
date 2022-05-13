@@ -15,6 +15,5 @@ const postUser = async (
   setUser({ ...response.data.user });
   setEditUser({ ...response.data.user });
   authDispatch({ type: 'UPDATE_USER', payload: response.data.user });
-  console.log(response);
 };
 export { postUser };

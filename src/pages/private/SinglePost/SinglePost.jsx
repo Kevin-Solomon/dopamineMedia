@@ -51,7 +51,6 @@ function SinglePost() {
     }
     getPost();
   }, [bookmark, post]);
-  console.log(loading);
   return (
     <Box>
       <Navbar />

@@ -62,7 +62,7 @@ function Profile() {
   const [editUser, setEditUser] = useState({
     ...user,
   });
-  console.log(editUser);
+
   const { userId } = useParams();
   useEffect(() => {
     const getUser = async () => {
@@ -71,7 +71,6 @@ function Profile() {
           method: 'GET',
           url: `/api/users/${userId}`,
         });
-        console.log(response);
         setUser(prevPost => ({ ...prevPost, ...response.data.user }));
         setEditUser(prevPost => ({ ...prevPost, ...response.data.user }));
       } catch (err) {
@@ -85,8 +84,11 @@ function Profile() {
     if (location.pathname.includes('tagged')) return 0;
     return 0;
   };
-  const bookmarkPost = post.post.filter(val =>
-    bookmark.bookmark.includes(val._id)
+  const bookmarkPost = post.post.filter(val => {
+    return bookmark.bookmark.includes(val._id);
+  });
+  const likePost = post.post.map(post =>
+    post.likes.likedBy.filter(user => user.username === auth.user.username)
   );
   return (
     <Box>
@@ -157,29 +159,60 @@ function Profile() {
         <Tabs defaultIndex={getIndex()} isFitted marginTop="1rem">
           <TabList>
             <Tab>Posts</Tab>
-            <Tab>Bookmark</Tab>
-            <Tab>Tagged</Tab>
+            {auth.user.username === user.username ? <Tab>Bookmark</Tab> : null}
           </TabList>
 
           <TabPanels>
-            <TabPanel>
-              <p>All of the post</p>
-            </TabPanel>
-            <TabPanel>
-              {bookmarkPost.map(({ username, likes, content, _id, img }) => (
-                <Post
-                  key={_id}
-                  username={username}
-                  likes={likes}
-                  content={content}
-                  img={img}
-                  _id={_id}
-                />
-              ))}
-            </TabPanel>
-            <TabPanel>
-              <p>Tagged Posts</p>
-            </TabPanel>
+            {user.username === auth.user.username ? (
+              <TabPanel>
+                {auth.user.post.map(
+                  ({ username, likes, content, _id, img, comments }) => (
+                    <Post
+                      comments={comments}
+                      key={_id}
+                      username={username}
+                      likes={likes}
+                      content={content}
+                      img={img}
+                      _id={_id}
+                    />
+                  )
+                )}
+              </TabPanel>
+            ) : (
+              <TabPanel>
+                {post.post
+                  .filter(post => post.username === user.username)
+                  .map(({ username, likes, content, _id, img, comments }) => (
+                    <Post
+                      comments={comments}
+                      key={_id}
+                      username={username}
+                      likes={likes}
+                      content={content}
+                      img={img}
+                      _id={_id}
+                    />
+                  ))}
+              </TabPanel>
+            )}
+            {user.username === auth.user.username ? (
+              <TabPanel>
+                {bookmarkPost.map(
+                  ({ username, likes, content, _id, img, comments }) => (
+                    <Post
+                      comments={comments}
+                      key={_id}
+                      username={username}
+                      likes={likes}
+                      content={content}
+                      img={img}
+                      _id={_id}
+                    />
+                  )
+                )}
+              </TabPanel>
+            ) : null}
           </TabPanels>
         </Tabs>
       </Box>
@@ -211,12 +244,10 @@ function Profile() {
                 <Input
                   onChange={e => {
                     e.preventDefault();
-                    console.log(e);
                     const reader = new FileReader();
                     reader.readAsDataURL(e.target.files[0]);
                     reader.onload = e => {
                       e.preventDefault();
-                      console.log(reader.result);
                       setEditUser(prevPost => ({
                         ...prevPost,
                         img: reader.result,

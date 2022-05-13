@@ -55,7 +55,6 @@ function Post({ username, likes, content, img, _id, comments }) {
     img: img,
     comments: comments,
   });
-  console.log(post);
   const commentRef = useRef(null);
   const [postAuthor, setAuthor] = useState({ _id: '' });
   useEffect(() => {
@@ -71,7 +70,6 @@ function Post({ username, likes, content, img, _id, comments }) {
         method: 'GET',
         url: `/api/comments/${_id}`,
       });
-      console.log(response);
     }
     getUsers();
     getComments();
@@ -123,7 +121,6 @@ function Post({ username, likes, content, img, _id, comments }) {
                   <Text
                     cursor="pointer"
                     onClick={() => {
-                      console.log('clciked');
                       dispatch(deletePost({ _id, token }));
                       toast({
                         title: 'Your post has been deleted',

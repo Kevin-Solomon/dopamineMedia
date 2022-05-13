@@ -65,7 +65,6 @@ function Navbar() {
           <NavLink
             to="/"
             style={({ isActive }) => {
-              console.log(isActive);
               isActive ? activeStyle : (activeStyle.color = 'none');
             }}
           >
@@ -148,7 +147,6 @@ function Navbar() {
               marginTop="20px"
               value={post.content}
               onChange={e => {
-                console.log('change', e.target.value);
                 setPost(prevPost => ({ ...prevPost, content: e.target.value }));
               }}
             />

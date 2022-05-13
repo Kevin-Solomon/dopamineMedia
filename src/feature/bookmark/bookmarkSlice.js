@@ -26,7 +26,6 @@ export const getInitialBookmark = createAsyncThunk(
 export const addBookmark = createAsyncThunk(
   'bookmark/addBookmark',
   async ({ _id, token }) => {
-    console.log(token);
     try {
       const response = await axios({
         method: 'POST',
@@ -49,7 +48,6 @@ export const deleteBookmark = createAsyncThunk(
         url: `/api/users/remove-bookmark/${_id}`,
         headers: { authorization: token },
       });
-      console.log(response);
       return response.data.bookmarks;
     } catch (err) {
       console.log(err);

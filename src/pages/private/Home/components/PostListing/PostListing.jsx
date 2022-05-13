@@ -4,16 +4,19 @@ import Post from './../../../../../components/Post/Post';
 
 import { Box } from '@chakra-ui/react';
 import { getQueryPost } from '../../../../../feature/post/postSlice';
+import { incrementPage } from '../../../../../feature/post/postSlice';
 import FollowerList from '../FollowerList/FollowerList';
 import axios from 'axios';
 function PostListing() {
   const dispatch = useDispatch();
   const { followers } = useSelector(state => state.followers);
-  const { post, loading, error, totalPost } = useSelector(state => state.post);
-  const [pageNumber, setPageNumber] = useState(1);
-  const { user } = useSelector(state => state.auth);
+  const { post, loading, error, totalPost, pageNumber } = useSelector(
+    state => state.post
+  );
+  const { user, token } = useSelector(state => state.auth);
   const userPost = post.filter(post => post.username === user.username);
   const postList = post.filter(post => followers.includes(post.username));
+  console.log(pageNumber);
   useEffect(() => {
     if (post.length === 0) {
       dispatch(getQueryPost({ pageNumber }));
@@ -21,7 +24,7 @@ function PostListing() {
     }
     if (totalPost === post.length) return;
     dispatch(getQueryPost({ pageNumber }));
-  }, [user.token, pageNumber]);
+  }, [token, pageNumber]);
   useEffect(() => {
     window.onscroll = () => {
       if (
@@ -29,7 +32,10 @@ function PostListing() {
         document.body.offsetHeight
       ) {
         console.log('end of the doc');
-        setPageNumber(prev => prev + 1);
+
+        if (totalPost === post.length) return;
+        if (Math.floor(post.length / 5) + 1 === pageNumber) return;
+        dispatch(incrementPage());
       }
     };
   });
