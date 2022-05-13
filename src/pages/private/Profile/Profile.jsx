@@ -25,6 +25,7 @@ import {
   useDisclosure,
   Button,
   AvatarBadge,
+  Image,
 } from '@chakra-ui/react';
 import Navbar from '../../../components/Navbar/Navbar';
 import { postUser } from '../../../service/postUser';
@@ -165,21 +166,32 @@ function Profile() {
           <TabPanels>
             {user.username === auth.user.username ? (
               <TabPanel>
-                {auth.user.post.map(
-                  ({ username, likes, content, _id, img, comments }) => {
-                    console.log(likes);
-                    return (
-                      <Post
-                        comments={comments}
-                        key={_id}
-                        username={username}
-                        likes={likes}
-                        content={content}
-                        img={img}
-                        _id={_id}
-                      />
-                    );
-                  }
+                {auth.user.post.length === 0 ? (
+                  <Box d="flex" justifyContent="center">
+                    <Box>
+                      <Text fontSize="xl" my="2">
+                        Please Try Posting something !!
+                      </Text>
+                      <Image src="https://media4.giphy.com/media/KMcZ9XZeQIks8/giphy.gif?cid=790b76119b164caec294ccc5ada06f71cd756f9936b58ed5&rid=giphy.gif&ct=g" />
+                    </Box>
+                  </Box>
+                ) : (
+                  auth.user.post.map(
+                    ({ username, likes, content, _id, img, comments }) => {
+                      console.log(likes);
+                      return (
+                        <Post
+                          comments={comments}
+                          key={_id}
+                          username={username}
+                          likes={likes}
+                          content={content}
+                          img={img}
+                          _id={_id}
+                        />
+                      );
+                    }
+                  )
                 )}
               </TabPanel>
             ) : (

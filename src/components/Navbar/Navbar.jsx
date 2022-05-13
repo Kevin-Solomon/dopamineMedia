@@ -74,8 +74,17 @@ function Navbar() {
           </NavLink>
 
           <Box onClick={() => onOpen()}>{getIcons('ADD_OUTLINE', '27px')}</Box>
-          <Box>{getIcons('EXPLORE_OUTLINE', '27px')}</Box>
-          <Box>{getIcons('OUTLINE_HEART', '27px')}</Box>
+          <NavLink
+            to={`/${user._id}/bookmark`}
+            style={({ isActive }) => {
+              return {
+                color: isActive ? '#3182CE' : '',
+              };
+            }}
+          >
+            <Box>{getIcons('BOOKMARK', '27px')}</Box>
+          </NavLink>
+
           <Avatar
             cursor="pointer"
             onClick={() => {

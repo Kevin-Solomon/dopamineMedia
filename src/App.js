@@ -44,6 +44,14 @@ function App() {
           </RequireAuth>
         }
       />
+      <Route
+        path="/:userId/bookmark"
+        element={
+          <RequireAuth>
+            <Profile />
+          </RequireAuth>
+        }
+      />
     </Routes>
   );
 }
