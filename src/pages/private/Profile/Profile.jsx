@@ -56,7 +56,6 @@ function Profile() {
     firstName: 'Guest',
     lastName: 'User',
     bio: '',
-    posts: 0,
     portfolio: '',
     img: '',
   });
@@ -72,9 +71,11 @@ function Profile() {
           method: 'GET',
           url: `/api/users/${userId}`,
         });
+        console.log(response);
         setUser(prevPost => ({ ...prevPost, ...response.data.user }));
         setEditUser(prevPost => ({ ...prevPost, ...response.data.user }));
       } catch (err) {
+        console.log(err.response);
         navigate('*');
       }
     };
@@ -138,7 +139,26 @@ function Profile() {
 
             <Box d="flex" gap="1rem">
               <Box as="span" d="flex" gap="3px">
-                <Text fontWeight="900">{user.posts}</Text>posts
+                <Text fontWeight="900">
+                  {
+                    post.post
+                      .filter(post => post.username === user.username)
+                      .map(
+                        ({ username, likes, content, _id, img, comments }) => (
+                          <Post
+                            comments={comments}
+                            key={_id}
+                            username={username}
+                            likes={likes}
+                            content={content}
+                            img={img}
+                            _id={_id}
+                          />
+                        )
+                      ).length
+                  }
+                </Text>
+                posts
               </Box>
               <Box as="span" d="flex" gap="3px">
                 <Text fontWeight="900">{user.followers.length}</Text>
