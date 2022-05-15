@@ -22,7 +22,7 @@ function PostListing() {
       dispatch(getQueryPost({ pageNumber }));
       return;
     }
-    if (totalPost === post.length) return;
+    if (post.length >= totalPost) return;
     if (pageNumber * 5 === post.length) return;
     dispatch(getQueryPost({ pageNumber }));
   }, [token, pageNumber]);
