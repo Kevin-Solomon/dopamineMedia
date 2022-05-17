@@ -28,7 +28,6 @@ import {
   Image,
 } from '@chakra-ui/react';
 import Navbar from '../../../components/Navbar/Navbar';
-import { postUser } from '../../../service/postUser';
 import { useSelector, useDispatch } from 'react-redux';
 import { getIcons } from '../../../util/getIcons';
 import Post from '../../../components/Post/Post';
@@ -60,7 +59,7 @@ function Profile() {
     img: '',
   });
   const [editUser, setEditUser] = useState({
-    ...user,
+    ...auth.user,
   });
 
   const { userId } = useParams();
@@ -71,7 +70,6 @@ function Profile() {
           method: 'GET',
           url: `/api/users/${userId}`,
         });
-        console.log(response);
         setUser(prevPost => ({ ...prevPost, ...response.data.user }));
         setEditUser(prevPost => ({ ...prevPost, ...response.data.user }));
       } catch (err) {
@@ -92,6 +90,8 @@ function Profile() {
   const likePost = post.post.map(post =>
     post.likes.likedBy.filter(user => user.username === auth.user.username)
   );
+  console.log(editUser);
+  console.log(user);
   return (
     <Box>
       <Navbar />
@@ -198,7 +198,6 @@ function Profile() {
                 ) : (
                   auth.user.post.map(
                     ({ username, likes, content, _id, img, comments }) => {
-                      console.log(likes);
                       return (
                         <Post
                           comments={comments}
@@ -372,6 +371,7 @@ function Profile() {
           <ModalFooter>
             <Button
               onClick={e => {
+                console.log(editUser);
                 e.preventDefault();
                 dispatch(
                   editUserDetails({ userData: editUser, token: auth.token })
