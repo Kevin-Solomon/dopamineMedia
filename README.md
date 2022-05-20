@@ -71,8 +71,4 @@ Encountered a bug or do you need a need a feature request ? Please to do check t
 
 # Desktop Version
 
-![dopamine gif](/src/assets/footballhq-desktop.gif)
-
-# Mobile Version
-
-![dopamine gif](/src/assets/footballhq-mobile.gif)
+![dopamine gif](/src/assets/dopamine.gif)
