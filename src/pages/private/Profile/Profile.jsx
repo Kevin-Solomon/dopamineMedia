@@ -28,7 +28,6 @@ import {
   Image,
 } from '@chakra-ui/react';
 import Navbar from '../../../components/Navbar/Navbar';
-import { postUser } from '../../../service/postUser';
 import { useSelector, useDispatch } from 'react-redux';
 import { getIcons } from '../../../util/getIcons';
 import Post from '../../../components/Post/Post';
@@ -56,12 +55,11 @@ function Profile() {
     firstName: 'Guest',
     lastName: 'User',
     bio: '',
-    posts: 0,
     portfolio: '',
     img: '',
   });
   const [editUser, setEditUser] = useState({
-    ...user,
+    ...auth.user,
   });
 
   const { userId } = useParams();
@@ -75,6 +73,7 @@ function Profile() {
         setUser(prevPost => ({ ...prevPost, ...response.data.user }));
         setEditUser(prevPost => ({ ...prevPost, ...response.data.user }));
       } catch (err) {
+        console.log(err.response);
         navigate('*');
       }
     };
@@ -91,6 +90,8 @@ function Profile() {
   const likePost = post.post.map(post =>
     post.likes.likedBy.filter(user => user.username === auth.user.username)
   );
+  console.log(editUser);
+  console.log(user);
   return (
     <Box>
       <Navbar />
@@ -138,7 +139,26 @@ function Profile() {
 
             <Box d="flex" gap="1rem">
               <Box as="span" d="flex" gap="3px">
-                <Text fontWeight="900">{user.posts}</Text>posts
+                <Text fontWeight="900">
+                  {
+                    post.post
+                      .filter(post => post.username === user.username)
+                      .map(
+                        ({ username, likes, content, _id, img, comments }) => (
+                          <Post
+                            comments={comments}
+                            key={_id}
+                            username={username}
+                            likes={likes}
+                            content={content}
+                            img={img}
+                            _id={_id}
+                          />
+                        )
+                      ).length
+                  }
+                </Text>
+                posts
               </Box>
               <Box as="span" d="flex" gap="3px">
                 <Text fontWeight="900">{user.followers.length}</Text>
@@ -178,7 +198,6 @@ function Profile() {
                 ) : (
                   auth.user.post.map(
                     ({ username, likes, content, _id, img, comments }) => {
-                      console.log(likes);
                       return (
                         <Post
                           comments={comments}
@@ -352,6 +371,7 @@ function Profile() {
           <ModalFooter>
             <Button
               onClick={e => {
+                console.log(editUser);
                 e.preventDefault();
                 dispatch(
                   editUserDetails({ userData: editUser, token: auth.token })

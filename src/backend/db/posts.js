@@ -16,7 +16,7 @@ export const posts = [
       likedBy: [],
       dislikedBy: [],
     },
-    username: 'unilad',
+    username: 'adarshbalika',
     comments: [],
     createdAt: formatDate(),
     updatedAt: formatDate(),

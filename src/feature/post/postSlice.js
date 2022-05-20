@@ -9,13 +9,11 @@ const initialState = {
 };
 export const getAllPost = createAsyncThunk('post/getAllPost', async () => {
   const response = await axios({ method: 'GET', url: '/api/posts' });
-  console.log(response);
   return response.data.posts;
 });
 export const addPostFunction = createAsyncThunk(
   'post/addPost',
   async ({ post, token }) => {
-    console.log(token);
     try {
       const response = await axios({
         method: 'POST',
@@ -34,13 +32,11 @@ export const deletePost = createAsyncThunk(
   'post/deletePost',
   async ({ _id, token }) => {
     try {
-      console.log(_id);
       const response = await axios({
         method: 'DELETE',
         url: `/api/posts/${_id}`,
         headers: { authorization: token },
       });
-      console.log(response);
       return response.data.posts;
     } catch (err) {
       return err;
@@ -57,7 +53,6 @@ export const editPost = createAsyncThunk(
         headers: { authorization: token },
         data: { postData: data },
       });
-      console.log(response);
       return response.data.posts;
     } catch (err) {
       return err;
@@ -74,7 +69,6 @@ export const addComment = createAsyncThunk(
         headers: { authorization: token },
         data: { commentData: comment },
       });
-      console.log(response);
       return response.data.posts;
     } catch (err) {
       console.log(err);
@@ -190,7 +184,6 @@ export const postSlice = createSlice({
       state.loading = true;
     },
     [addPostFunction.fulfilled]: (state, { payload }) => {
-      console.log(payload);
       state.loading = false;
       state.post = payload;
     },
@@ -290,7 +283,6 @@ export const postSlice = createSlice({
       state.loading = true;
     },
     [getQueryPost.fulfilled]: (state, { payload }) => {
-      console.log(payload);
       state.loading = false;
       state.post = [...state.post, ...payload.posts];
       state.totalPost = payload.totalPost;

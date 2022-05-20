@@ -80,7 +80,7 @@ function SinglePost() {
             <Avatar size="sm" name={currPost.username} />
             <Text>{currPost.username}</Text>
           </Box>
-          {currPost.img === '' ? null : <Image />}
+          {currPost.img === '' ? null : <Image src={currPost.img} />}
           <Box>{currPost.content}</Box>
           <Box d="flex" justifyContent="space-between" my={4}>
             <Box d="flex" gap={2}>

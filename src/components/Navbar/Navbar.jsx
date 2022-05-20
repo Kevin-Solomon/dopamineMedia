@@ -25,7 +25,7 @@ import { addPostFunction } from './../../feature/post/postSlice';
 function Navbar() {
   const [isLessThan600] = useMediaQuery('(max-width:1000px)');
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [post, setPost] = useState({ content: '', img: '' });
+  const [post, setPost] = useState({ content: '', img: '', comments: [] });
   const navigate = useNavigate();
   const toast = useToast();
   const {

@@ -13,7 +13,6 @@ import { loginUser } from './../../../../../feature/auth/authSlice';
 import { useDispatch } from 'react-redux';
 function Login({ prevpath }) {
   const toast = useToast();
-  console.log(prevpath);
   const navigate = useNavigate();
   const [user, setUser] = useState({ username: '', password: '' });
   const changeHandler = e => {

@@ -73,7 +73,7 @@ function Post({ username, likes, content, img, _id, comments }) {
     }
     getUsers();
     getComments();
-  }, [user.token]);
+  }, [token, user]);
   return (
     <Box w="100%" margin="10px auto" backgroundColor="#ffffff">
       <Box
@@ -87,7 +87,7 @@ function Post({ username, likes, content, img, _id, comments }) {
         <Box d="flex" justifyContent="space-between">
           <Box>
             <Link to={`/${postAuthor?._id}`}>
-              <Avatar size="sm" name={username} />
+              <Avatar size="sm" name={username} src={postAuthor.img} />
             </Link>
 
             <Text>{username}</Text>
