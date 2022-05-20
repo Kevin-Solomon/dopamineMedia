@@ -1,6 +1,4 @@
-# FootballHQ
-
-### FootballHQ is an eCommerce platform built for the footballer in you.
+# DopamineMedia
 
 [![wakatime](https://wakatime.com/badge/user/1773f973-ffcf-4a9c-b61a-8e4fdc1ecf3e/project/5611245b-b63c-4602-919b-850ee58cffb5.svg)](https://wakatime.com/badge/user/1773f973-ffcf-4a9c-b61a-8e4fdc1ecf3e/project/5611245b-b63c-4602-919b-850ee58cffb5)
 ![HTML](https://img.shields.io/badge/HTML-HTML-orange)
