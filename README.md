@@ -1,70 +1,78 @@
-# Getting Started with Create React App
+# FootballHQ
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### FootballHQ is an eCommerce platform built for the footballer in you.
 
-## Available Scripts
+[![wakatime](https://wakatime.com/badge/user/1773f973-ffcf-4a9c-b61a-8e4fdc1ecf3e/project/5611245b-b63c-4602-919b-850ee58cffb5.svg)](https://wakatime.com/badge/user/1773f973-ffcf-4a9c-b61a-8e4fdc1ecf3e/project/5611245b-b63c-4602-919b-850ee58cffb5)
+![HTML](https://img.shields.io/badge/HTML-HTML-orange)
+![CSS](https://img.shields.io/badge/CSS-CSS-blue)
+![JS](https://img.shields.io/badge/ReactJS-ReactJS-blue)
 
-In the project directory, you can run:
+![Issues](https://img.shields.io/github/issues/Kevin-Solomon/football-ecommerce)
+![forks](https://img.shields.io/github/forks/Kevin-Solomon/football-ecommerce)
 
-### `yarn start`
+# Key Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- Authentication
+  - Login
+  - SignUp
+  - Logout
+- Private Routes
+- Public Routes
+- Home Page
+  - Feed Section
+- Create a Post
+  - Upload Images
+  - Emoji & Gif enabled → P1
+  - Like
+- Comment
+- User Profile
+  - Add Profile Picture
+  - Bio
+  - Portfolio URL
+- Bookmark Post
+- Loading & Alerts
+  - Add skeletal loading animation for any async operations.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Tech Stack
 
-### `yarn test`
+- ReactJS
+- Redux-Toolkit
+- ChakraUI
+- Mockbee
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Folder Structure
 
-### `yarn build`
+```js
+  /public
+  /src
+      /assests
+      /backend
+      /features
+      /store
+      /pages
+      /util
+  /package-lock.json
+  /README.md
+  /yarn.lock
+  /package.json
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+# Issue Reporting
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Encountered a bug or do you need a need a feature request ? Please to do check the issues tab on the repo if your issue / request does not exist , [open a new issue](https://github.com/Kevin-Solomon/dopamineMedia/issues/new)
 
-### `yarn eject`
+**_If you have encountered a bug a before and after picture of the bug would be very helpful or if time permits a small video of the bug would greatly help us undertand the issue._**
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+# 👨‍💻 Connect with me
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+<a href="https://twitter.com/kevinsolomon777"><img src="https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white"/></a>
+<a href="https://www.linkedin.com/in/kevin-solomon-8b2b2b1a5/"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white"/></a>
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+# Desktop Version
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+![dopamine gif](/src/assets/footballhq-desktop.gif)
 
-## Learn More
+# Mobile Version
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+![dopamine gif](/src/assets/footballhq-mobile.gif)
