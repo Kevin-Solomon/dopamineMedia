@@ -32,6 +32,7 @@
 - Bookmark Post
 - Loading & Alerts
   - Add skeletal loading animation for any async operations.
+- Infinite Scroll
 
 ## Tech Stack
 
